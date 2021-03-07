@@ -1,0 +1,64 @@
+type User {
+    id: ID!
+    username: String!
+    email: String!
+    createdAt: String!
+    token: String!
+}
+
+type Community {
+    id: ID!
+    name: String!
+    description: String
+    createdAt: String!
+    posts: [Post]
+    user: User
+}
+
+type Post {
+    id: ID!
+    title: String!
+    body: String
+    url: String
+    createdAt: String!
+    community: Community
+    user: User
+    voteCount: Int
+    comments: [Comment]
+}
+
+type Comment {
+    id: ID!
+    body: String!
+    createdAt: String!
+    post: Post
+    user: User
+}
+
+type Vote {
+    id: ID!
+    voteType: String
+    post: Post
+    user: User
+}
+
+input PostInput {
+    title: String!
+    description: String
+    url: String
+    createdAt: String!
+}
+
+type Mutation {
+    createPost(post: PostInput): Post
+}
+
+type Query {
+    allPosts: [Post]
+    allUsers: [User]
+}
+
+schema {
+    query: Query
+    mutation: Mutation
+}
