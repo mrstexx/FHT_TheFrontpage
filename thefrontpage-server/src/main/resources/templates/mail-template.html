@@ -2,6 +2,15 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head></head>
 <body>
-<span th:text="${message}"></span>
+<div>
+    <p>
+        Dear user,<br>
+        Thank you for signing up to The FrontPage. Please click on the <b>Link</b> below to activate your account:
+        <br> <a th:href="${message}">Activate</a>
+        <br>
+        Enjoy :)<br>
+        The FrontPage Admin Stuff!
+    </p>
+</div>
 </body>
 </html>

@@ -48,7 +48,7 @@ public class AuthService {
         mailService.sendMail(new NotificationMail(
                 "User Account Activation",
                 user.getEmail(),
-                "Thank you for signing up to The FrontPage. Please click on the URL below to activate your account: \n" + "http://localhost:8080/api/auth/confirm?token=" + token));
+                "http://localhost:8080/api/auth/confirm?token=" + token));
 
     }
 
