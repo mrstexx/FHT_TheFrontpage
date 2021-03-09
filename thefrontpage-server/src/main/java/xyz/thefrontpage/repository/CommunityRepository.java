@@ -9,7 +9,7 @@ import java.util.Optional;
 @Repository
 public interface CommunityRepository extends JpaRepository<Community, Long> {
     @Override
-    Optional<Community> findById(Long aLong);
+    Optional<Community> findById(Long id);
 
     Optional<Community> findByName(String communityName);
 }
