@@ -18,6 +18,8 @@ public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Lob
     private String body;
 
     @Column(name = "created_at")

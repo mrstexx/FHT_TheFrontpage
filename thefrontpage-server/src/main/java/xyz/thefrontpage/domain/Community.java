@@ -20,7 +20,11 @@ public class Community {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(unique = true)
     private String name;
+
+    @Lob
     private String description;
 
     @Column(name = "created_at")
