@@ -16,6 +16,7 @@ public class RefreshToken {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(unique = true)
     private String token;
     @Column(name = "created_at")
     private LocalDateTime createdAt;
