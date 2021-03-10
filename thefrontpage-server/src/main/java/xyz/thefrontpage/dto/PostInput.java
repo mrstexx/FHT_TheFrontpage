@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PostInput {
+    private Long id;
     private String username;
     private String communityName;
     private String title;

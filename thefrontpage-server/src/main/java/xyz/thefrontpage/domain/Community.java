@@ -34,12 +34,7 @@ public class Community {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "t_community_posts",
-            joinColumns = @JoinColumn(name = "post_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "community_id", referencedColumnName = "id")
-    )
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, mappedBy = "community")
     private List<Post> posts;
 
 }

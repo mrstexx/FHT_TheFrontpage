@@ -28,9 +28,21 @@ public class CommunityResource {
     }
 
     @PostMapping("/")
-    public ResponseEntity<CommunityResponse> createPost(@RequestBody CommunityInput communityInput) {
+    public ResponseEntity<CommunityResponse> createCommunity(@RequestBody CommunityInput communityInput) {
         CommunityResponse community = communityService.createCommunity(communityInput);
         return ResponseEntity.status(HttpStatus.CREATED).body(community);
+    }
+
+    @PutMapping("/")
+    public ResponseEntity<?> updateCommunity(@RequestBody CommunityInput communityInput) {
+        communityService.updateCommunity(communityInput);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @DeleteMapping("/{name}")
+    public ResponseEntity<?> deleteCommunity(@PathVariable String name) {
+        communityService.deleteCommunity(name);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
 }

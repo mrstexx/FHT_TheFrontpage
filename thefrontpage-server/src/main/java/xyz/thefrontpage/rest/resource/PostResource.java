@@ -33,4 +33,15 @@ public class PostResource {
         return ResponseEntity.status(HttpStatus.CREATED).body(post);
     }
 
+    @PutMapping("/")
+    public ResponseEntity<?> updatePost(@RequestBody PostInput postInput) {
+        postService.updatePost(postInput);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deletePost(@PathVariable Long id) {
+        postService.deletePost(id);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
 }

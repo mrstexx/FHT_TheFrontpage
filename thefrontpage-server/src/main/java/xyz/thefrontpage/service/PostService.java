@@ -45,6 +45,31 @@ public class PostService {
         return mapToDto(newPost);
     }
 
+    @Transactional
+    public void updatePost(PostInput postInput) {
+        User currentUser = authService.getCurrentUser();
+        Post post = postRepository.findById(postInput.getId())
+                .orElseThrow(() -> new IllegalStateException("No post found with id - " + postInput.getId()));
+        if (!post.getUser().getUsername().equals(currentUser.getUsername())) {
+            throw new IllegalStateException("Missing access rights to update post");
+        }
+        post.setTitle(postInput.getTitle());
+        post.setBody(postInput.getBody());
+        post.setUrl(postInput.getUrl());
+        postRepository.save(post);
+    }
+
+    @Transactional
+    public void deletePost(Long id) {
+        User currentUser = authService.getCurrentUser();
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new IllegalStateException("No post found with id - " + id));
+        if (!post.getUser().getUsername().equals(currentUser.getUsername())) {
+            throw new IllegalStateException("Missing access rights to delete post");
+        }
+        postRepository.delete(post);
+    }
+
     private Post mapPostOfRequest(PostInput postInput, User currentUser, Community community) {
         return Post.builder()
                 .title(postInput.getTitle())
