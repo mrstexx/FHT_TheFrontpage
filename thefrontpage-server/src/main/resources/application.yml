@@ -1,3 +1,7 @@
+security:
+  jks-key: "secure-key"
+  jks-store: "thefrontpage"
+
 server:
   error:
     include-message: always
@@ -34,3 +38,4 @@ spring:
 jwt:
   expiration:
     time: 900000
+    confirmation: 15

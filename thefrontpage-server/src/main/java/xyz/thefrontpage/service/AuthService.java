@@ -1,6 +1,7 @@
 package xyz.thefrontpage.service;
 
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -32,6 +33,9 @@ public class AuthService {
     private final ConfirmationTokenRepository confirmationTokenRepository;
     private final MailService mailService;
 
+    @Value("${jwt.expiration.confirmation}")
+    private Long jwtExpirationInMinutes;
+
     @Transactional
     public void register(RegisterInput registerInput) {
         boolean isUsernameTaken = userRepository.findByUsername(registerInput.getUsername()).isPresent();
@@ -44,7 +48,7 @@ public class AuthService {
                 UserRole.USER);
         userRepository.save(user);
         String token = generateVerificationToken(user);
-        // TODO hardcoded URL, message body..., REST vs. GraphQL
+        // TODO hardcoded URL, REST vs. GraphQL
         mailService.sendMail(new NotificationMail(
                 "User Account Activation",
                 user.getEmail(),
@@ -105,11 +109,10 @@ public class AuthService {
 
     private String generateVerificationToken(User user) {
         String verificationToken = UUID.randomUUID().toString();
-        // TODO: read from config minutes
         ConfirmationToken confirmationToken = new ConfirmationToken(
                 verificationToken,
                 LocalDateTime.now(),
-                LocalDateTime.now().plusMinutes(15),
+                LocalDateTime.now().plusMinutes(jwtExpirationInMinutes),
                 user
         );
         confirmationTokenRepository.save(confirmationToken);

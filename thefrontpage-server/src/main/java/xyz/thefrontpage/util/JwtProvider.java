@@ -2,6 +2,7 @@ package xyz.thefrontpage.util;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
@@ -15,6 +16,7 @@ import java.security.cert.CertificateException;
 import java.time.Instant;
 import java.util.Date;
 
+@Slf4j
 @Service
 public class JwtProvider {
 
@@ -23,17 +25,31 @@ public class JwtProvider {
     @Value("${jwt.expiration.time}")
     private Long jwtExpirationInMillis;
 
+    @Value("${security.jsk-key}")
+    private String secureKey;
+
+    @Value("{security.jks-store}")
+    private String keyStoreName;
+
     @PostConstruct
     public void init() {
+        InputStream resource = null;
         try {
             keyStore = KeyStore.getInstance("JKS");
-            // TODO: create constant or from config file
-            char[] storePwd = "secure-key".toCharArray();
-            // TODO: close resource
-            InputStream resource = getClass().getResourceAsStream("/thefrontpage.jks");
+            char[] storePwd = secureKey.toCharArray();
+            resource = getClass().getResourceAsStream("/" + keyStoreName + ".jks");
             keyStore.load(resource, storePwd);
         } catch (IOException | CertificateException | NoSuchAlgorithmException | KeyStoreException e) {
-            throw new IllegalStateException("Exception occurred while loading thefrontpage.jks");
+            throw new IllegalStateException("Exception occurred while loading key store");
+        } finally {
+            if (resource != null) {
+                try {
+                    resource.close();
+                } catch (IOException e) {
+                    log.error("Resource closing failed: {}", e.getLocalizedMessage());
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
@@ -57,17 +73,17 @@ public class JwtProvider {
 
     private PrivateKey getPrivateKey() {
         try {
-            return (PrivateKey) keyStore.getKey("thefrontpage", "secure-key".toCharArray());
+            return (PrivateKey) keyStore.getKey(keyStoreName, secureKey.toCharArray());
         } catch (KeyStoreException | NoSuchAlgorithmException | UnrecoverableKeyException e) {
-            throw new IllegalStateException("Exception occurred while retrieving private ket from keystore.jks");
+            throw new IllegalStateException("Exception occurred while retrieving private ket from key store");
         }
     }
 
     private PublicKey getPublicKey() {
         try {
-            return keyStore.getCertificate("thefrontpage").getPublicKey();
+            return keyStore.getCertificate(keyStoreName).getPublicKey();
         } catch (KeyStoreException e) {
-            throw new IllegalStateException("Exception occurred while retrieving public ket from keystore.jks");
+            throw new IllegalStateException("Exception occurred while retrieving public ket from key store");
         }
     }
 
