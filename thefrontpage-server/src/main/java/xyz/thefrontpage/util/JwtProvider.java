@@ -25,10 +25,10 @@ public class JwtProvider {
     @Value("${jwt.expiration.time}")
     private Long jwtExpirationInMillis;
 
-    @Value("${security.jsk-key}")
+    @Value("${security.jks-key}")
     private String secureKey;
 
-    @Value("{security.jks-store}")
+    @Value("${security.jks-store}")
     private String keyStoreName;
 
     @PostConstruct

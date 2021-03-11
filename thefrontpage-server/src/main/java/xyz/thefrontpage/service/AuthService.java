@@ -1,6 +1,6 @@
 package xyz.thefrontpage.service;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,7 +22,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class AuthService {
 
     private final PasswordEncoder passwordEncoder;
@@ -34,7 +34,7 @@ public class AuthService {
     private final MailService mailService;
 
     @Value("${jwt.expiration.confirmation}")
-    private Long jwtExpirationInMinutes;
+    private Integer jwtExpirationInMinutes;
 
     @Transactional
     public void register(RegisterInput registerInput) {
