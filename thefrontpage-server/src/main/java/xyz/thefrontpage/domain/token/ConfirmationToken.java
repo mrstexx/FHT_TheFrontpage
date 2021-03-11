@@ -1,6 +1,5 @@
 package xyz.thefrontpage.domain.token;
 
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import xyz.thefrontpage.domain.User;
