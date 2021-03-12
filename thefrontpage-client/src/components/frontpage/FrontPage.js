@@ -1,5 +1,7 @@
 import React from 'react';
-import { Grid, Image } from 'semantic-ui-react';
+import { Grid } from 'semantic-ui-react';
+import CreatePost from '../post/CreatePost';
+import PostElement from '../post/PostElement';
 
 class FrontPage extends React.Component {
   constructor(props) {
@@ -9,12 +11,9 @@ class FrontPage extends React.Component {
   render() {
     return (
       <Grid>
-        <Grid.Column width={11}>
-          <Image src="/images/wireframe/paragraph.png" />
-        </Grid.Column>
-        <Grid.Column width={3}>
-          <Image src="/images/wireframe/paragraph.png" />
-        </Grid.Column>
+        <CreatePost />
+        <PostElement />
+        <PostElement />
       </Grid>
     );
   }

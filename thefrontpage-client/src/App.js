@@ -14,12 +14,19 @@ import './App.css';
 function App() {
   return (
     <div className="App">
-      <Container fluid>
-        <Header />
-      </Container>
+      <div
+        style={{
+          paddingBottom: '70px'
+        }}
+      >
+        <Container fluid>
+          <Header />
+        </Container>
+      </div>
       <Container>
         <Router>
           <FrontPage path="/" />
+          <FrontPage path="/feed" />
           <Login path="/login" />
           <Register path="/signup" />
           <NotFound default />

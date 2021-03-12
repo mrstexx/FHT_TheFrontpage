@@ -16,18 +16,18 @@ const Header = () => {
       <Menu.Item
         name="feed"
         active={activeItem === 'feed'}
-        icon="paper plane outline icon"
+        icon="paper plane outline"
         onClick={handleItemClick}
       />
       <Menu.Item
-        name="communities"
-        active={activeItem === 'communities'}
+        name="community"
+        active={activeItem === 'community'}
         icon="newspaper outline"
         onClick={handleItemClick}
       />
       <Menu.Menu position="right">
         <Menu.Item
-          icon="sign-out alternate icon"
+          icon="sign-out alternate"
           name="logout"
           active={activeItem === 'logout'}
           onClick={handleItemClick}
