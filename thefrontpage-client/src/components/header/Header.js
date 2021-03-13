@@ -1,3 +1,4 @@
+import { navigate } from '@reach/router';
 import React, { useState } from 'react';
 import { Menu } from 'semantic-ui-react';
 
@@ -5,6 +6,7 @@ const Header = () => {
   const [activeItem, setActiveItem] = useState('home');
   const handleItemClick = (e, { name }) => {
     setActiveItem(name);
+    navigate(name);
   };
   return (
     <Menu fixed="top" fluid>

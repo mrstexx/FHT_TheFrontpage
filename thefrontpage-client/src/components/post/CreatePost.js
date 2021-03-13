@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Editor } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import { Button, Grid, Input } from 'semantic-ui-react';
+import { Button, Divider, Grid, Input } from 'semantic-ui-react';
 
 const CreatePost = () => {
   const [editorState, setEditorState] = useState();
@@ -34,9 +34,9 @@ const CreatePost = () => {
         onEditorStateChange={onEditorStateChange}
       />
       <br></br>
-      <Button color="blue">
-        Create post
-      </Button>
+      <Divider horizontal>
+        <Button color="blue">Create post</Button>
+      </Divider>
     </div>
   );
 };

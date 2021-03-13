@@ -39,7 +39,7 @@ const PostElement = () => {
               />
             </div>
             <div className="post-body-footer">
-              <Link to="/">
+              <Link to="/post">
                 <Icon name="comments outline" /> 5.4k Comments
               </Link>
             </div>

@@ -42,3 +42,14 @@
 .post-body-footer {
   padding: 5px 0;
 }
+
+.post-page-container {
+  padding: 10px;
+  background-color: white;
+  border-radius: 10px;
+  border: 1px solid #efefef;
+}
+
+.post-body-description {
+  padding: 15px 0;
+}

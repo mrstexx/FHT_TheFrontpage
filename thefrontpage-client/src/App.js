@@ -7,6 +7,8 @@ import FrontPage from './components/frontpage/FrontPage';
 import Login from './components/auth/Login';
 import Register from './components/auth/Register';
 import NotFound from './NotFound';
+import PostPage from './components/post/PostPage';
+import CommunityPage from './components/community/CommunityPage';
 
 import 'semantic-ui-css/semantic.min.css';
 import './App.css';
@@ -27,6 +29,8 @@ function App() {
         <Router>
           <FrontPage path="/" />
           <FrontPage path="/feed" />
+          <PostPage path="/post" />
+          <CommunityPage path="/community" />
           <Login path="/login" />
           <Register path="/signup" />
           <NotFound default />
