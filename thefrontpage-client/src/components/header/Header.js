@@ -1,6 +1,6 @@
 import { navigate } from '@reach/router';
 import React, { useState } from 'react';
-import { Menu } from 'semantic-ui-react';
+import { Dropdown, Menu } from 'semantic-ui-react';
 
 const Header = () => {
   const [activeItem, setActiveItem] = useState('home');
@@ -10,7 +10,7 @@ const Header = () => {
   };
   return (
     <Menu fixed="top" fluid>
-      <Menu.Item>
+      <Menu.Item name="/" onClick={handleItemClick}>
         <b>
           <i className="hashtag icon"></i>TheFrontpage
         </b>
@@ -28,12 +28,12 @@ const Header = () => {
         onClick={handleItemClick}
       />
       <Menu.Menu position="right">
-        <Menu.Item
-          icon="sign-out alternate"
-          name="logout"
-          active={activeItem === 'logout'}
-          onClick={handleItemClick}
-        />
+        <Dropdown icon="user circle" item text="mrstexx">
+          <Dropdown.Menu>
+            <Dropdown.Item>Profile</Dropdown.Item>
+            <Dropdown.Item>Log Out</Dropdown.Item>
+          </Dropdown.Menu>
+        </Dropdown>
       </Menu.Menu>
     </Menu>
   );

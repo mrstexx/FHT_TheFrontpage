@@ -6,6 +6,7 @@ import Header from './components/header/Header';
 import FrontPage from './components/frontpage/FrontPage';
 import Login from './components/auth/Login';
 import Register from './components/auth/Register';
+import UserPage from './components/auth/UserPage';
 import NotFound from './NotFound';
 import PostPage from './components/post/PostPage';
 import CommunityPage from './components/community/CommunityPage';
@@ -33,6 +34,7 @@ function App() {
           <CommunityPage path="/community" />
           <Login path="/login" />
           <Register path="/signup" />
+          <UserPage path="/user" />
           <NotFound default />
         </Router>
       </Container>
