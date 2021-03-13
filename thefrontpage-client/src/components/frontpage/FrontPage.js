@@ -11,7 +11,9 @@ class FrontPage extends React.Component {
   render() {
     return (
       <Grid>
-        <CreatePost />
+        <Grid.Row>
+          <CreatePost />
+        </Grid.Row>
         <PostElement />
         <PostElement />
       </Grid>

@@ -1,0 +1,44 @@
+.post-base {
+  border: 1px solid #efefef;
+  border-radius: 10px;
+  background-color: white;
+  margin-top: 10px;
+}
+
+.post-grid {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+}
+
+.post-vote {
+  display: flex;
+  flex-direction: column;
+  padding: 0 5px;
+  color: #8e8e8e;
+}
+
+.post-vote-count {
+  padding: 5px 0;
+  font-weight: bold;
+}
+
+.post-body {
+  width: 100%;
+  padding-left: 15px;
+  text-align: left;
+}
+
+.post-body-header {
+  color: #8e8e8e;
+}
+
+.post-body-title {
+  font-size: 20px;
+  font-weight: bold;
+  padding: 10px 0;
+}
+
+.post-body-footer {
+  padding: 5px 0;
+}
