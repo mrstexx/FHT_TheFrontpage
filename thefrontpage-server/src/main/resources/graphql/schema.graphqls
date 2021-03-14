@@ -3,7 +3,6 @@ type User {
     username: String!
     email: String!
     createdAt: String!
-    token: String!
 }
 
 type Community {
@@ -49,16 +48,17 @@ input PostInput {
     createdAt: String!
 }
 
-type Mutation {
-    createPost(post: PostInput): Post
-}
+#type Mutation {
+#    createPost(post: PostInput): Post
+#}
 
+# All available queries on this graphql server
 type Query {
     allPosts: [Post]
-    allUsers: [User]
+    # allUsers: [User]
 }
 
 schema {
     query: Query
-    mutation: Mutation
+    #  mutation: Mutation
 }

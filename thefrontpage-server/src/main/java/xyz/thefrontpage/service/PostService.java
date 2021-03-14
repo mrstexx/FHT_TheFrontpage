@@ -25,6 +25,11 @@ public class PostService {
     private final CommunityRepository communityRepository;
 
     @Transactional(readOnly = true)
+    public List<Post> getPosts() {
+        return postRepository.findAll();
+    }
+
+    @Transactional(readOnly = true)
     public List<PostResponse> getAllPosts() {
         return postRepository.findAll().stream().map(this::mapToDto).collect(Collectors.toList());
     }
