@@ -6,12 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import xyz.thefrontpage.dto.AuthResponse;
 import xyz.thefrontpage.dto.LoginInput;
-import xyz.thefrontpage.dto.RefreshTokenInput;
 import xyz.thefrontpage.dto.RegisterInput;
 import xyz.thefrontpage.service.AuthService;
-import xyz.thefrontpage.service.RefreshTokenService;
-
-import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -19,10 +15,9 @@ import javax.validation.Valid;
 public class AuthResource {
 
     private final AuthService authService;
-    private final RefreshTokenService refreshTokenService;
 
     @PostMapping("/register")
-    public ResponseEntity<String> signUp(@RequestBody RegisterInput registerInput) {
+    public ResponseEntity<String> register(@RequestBody RegisterInput registerInput) {
         authService.register(registerInput);
         return new ResponseEntity<>("User registration was successful", HttpStatus.OK);
     }
@@ -39,15 +34,9 @@ public class AuthResource {
         return new ResponseEntity<>(authResponse, HttpStatus.OK);
     }
 
-    @PostMapping("/refresh/token")
-    public ResponseEntity<AuthResponse> refreshTokens(@Valid @RequestBody RefreshTokenInput refreshTokenInput) {
-        return ResponseEntity.status(HttpStatus.OK).body(authService.refreshToken(refreshTokenInput));
-    }
-
     @PostMapping("/logout")
-    public ResponseEntity<String> logout(@Valid @RequestBody RefreshTokenInput refreshTokenInput) {
-        refreshTokenService.deleteRefreshToken(refreshTokenInput.getRefreshToken());
-        return ResponseEntity.status(HttpStatus.OK).body("Refresh token deleted successfully!");
+    public ResponseEntity<String> logout() {
+        return ResponseEntity.status(HttpStatus.OK).body("Successfully logged out.");
     }
 
 }

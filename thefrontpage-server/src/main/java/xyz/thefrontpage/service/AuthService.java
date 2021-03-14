@@ -15,7 +15,7 @@ import xyz.thefrontpage.domain.token.ConfirmationToken;
 import xyz.thefrontpage.dto.*;
 import xyz.thefrontpage.repository.ConfirmationTokenRepository;
 import xyz.thefrontpage.repository.UserRepository;
-import xyz.thefrontpage.util.JwtProvider;
+import xyz.thefrontpage.util.JwtUtil;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -26,10 +26,9 @@ import java.util.UUID;
 public class AuthService {
 
     private final PasswordEncoder passwordEncoder;
-    private final JwtProvider jwtProvider;
+    private final JwtUtil jwtUtil;
     private final AuthenticationManager authenticationManager;
     private final UserRepository userRepository;
-    private final RefreshTokenService refreshTokenService;
     private final ConfirmationTokenRepository confirmationTokenRepository;
     private final MailService mailService;
 
@@ -53,7 +52,6 @@ public class AuthService {
                 "User Account Activation",
                 user.getEmail(),
                 "http://localhost:8080/api/auth/confirm?token=" + token));
-
     }
 
     public AuthResponse login(LoginInput loginInput) {
@@ -61,12 +59,11 @@ public class AuthService {
                 new UsernamePasswordAuthenticationToken(loginInput.getUsername(), loginInput.getPassword())
         );
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        String token = jwtProvider.generateToken(authentication);
+        String token = jwtUtil.generateToken(authentication);
         return AuthResponse.builder()
                 .authToken(token)
-                .refreshToken(refreshTokenService.generateRefreshToken().getToken())
                 .username(loginInput.getUsername())
-                .expiresAt(Instant.now().plusMillis(jwtProvider.getJwtExpirationInMillis()))
+                .expiresAt(Instant.now().plusMillis(jwtUtil.getJwtExpirationInMillis()))
                 .build();
     }
 
@@ -96,15 +93,8 @@ public class AuthService {
                 .orElseThrow(() -> new IllegalStateException("Username not found - " + principal.getUsername()));
     }
 
-    public AuthResponse refreshToken(RefreshTokenInput refreshTokenInput) {
-        refreshTokenService.validateRefreshToken(refreshTokenInput.getRefreshToken());
-        String token = jwtProvider.generateTokenWithUsername(refreshTokenInput.getUsername());
-        return AuthResponse.builder()
-                .authToken(token)
-                .refreshToken(refreshTokenInput.getRefreshToken())
-                .expiresAt(Instant.now().plusMillis(jwtProvider.getJwtExpirationInMillis()))
-                .username(refreshTokenInput.getUsername())
-                .build();
+    public void logout(String token) {
+        // TODO
     }
 
     private String generateVerificationToken(User user) {
