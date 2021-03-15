@@ -36,9 +36,14 @@ type Comment {
 
 type Vote {
     id: ID!
-    voteType: String
+    voteType: VoteType
     post: Post
     user: User
+}
+
+enum VoteType {
+    UP_VOTE
+    DOWN_VOTE
 }
 
 input PostInput {
@@ -49,7 +54,7 @@ input PostInput {
 }
 
 #type Mutation {
-#    createPost(post: PostInput): Post
+#    createPost(post: PostRequest): Post
 #}
 
 # All available queries on this graphql server

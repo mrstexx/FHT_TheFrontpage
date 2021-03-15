@@ -2,7 +2,7 @@ package xyz.thefrontpage.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import xyz.thefrontpage.domain.Comment;
+import xyz.thefrontpage.entity.Comment;
 
 import java.util.List;
 

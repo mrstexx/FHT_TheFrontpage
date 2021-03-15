@@ -5,9 +5,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import xyz.thefrontpage.dto.CommentDto;
+import xyz.thefrontpage.dto.request.CommentRequest;
+import xyz.thefrontpage.entity.Comment;
+import xyz.thefrontpage.mapper.CommentMapper;
 import xyz.thefrontpage.service.CommentService;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/comments/")
@@ -17,14 +21,14 @@ public class CommentResource {
     private final CommentService commentService;
 
     @PostMapping("/")
-    public ResponseEntity<CommentDto> createComment(@RequestBody CommentDto commentDto) {
-        CommentDto newComment = commentService.createComment(commentDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(newComment);
+    public ResponseEntity<CommentDto> createComment(@RequestBody CommentRequest commentRequest) {
+        Comment newComment = commentService.createComment(commentRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).body(CommentMapper.mapToDto(newComment));
     }
 
     @PutMapping
-    public ResponseEntity<?> updateComment(@RequestBody CommentDto commentDto) {
-        commentService.updateComment(commentDto);
+    public ResponseEntity<?> updateComment(@RequestBody CommentRequest commentRequest) {
+        commentService.updateComment(commentRequest);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
@@ -36,8 +40,8 @@ public class CommentResource {
 
     @GetMapping("/{postId}")
     public ResponseEntity<List<CommentDto>> getCommentsByPostId(@PathVariable Long postId) {
-        List<CommentDto> allComments = commentService.getCommentsByPostId(postId);
-        return ResponseEntity.status(HttpStatus.OK).body(allComments);
+        List<Comment> allComments = commentService.getCommentsByPostId(postId);
+        List<CommentDto> commentsDto = allComments.stream().map(CommentMapper::mapToDto).collect(Collectors.toList());
+        return ResponseEntity.status(HttpStatus.OK).body(commentsDto);
     }
-
 }

@@ -1,4 +1,4 @@
-package xyz.thefrontpage.domain;
+package xyz.thefrontpage.entity;
 
 public enum UserRole {
     USER

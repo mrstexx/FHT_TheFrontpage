@@ -9,9 +9,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import xyz.thefrontpage.domain.User;
-import xyz.thefrontpage.domain.UserRole;
-import xyz.thefrontpage.domain.token.ConfirmationToken;
+import xyz.thefrontpage.dto.request.LoginRequest;
+import xyz.thefrontpage.dto.request.RegisterRequest;
+import xyz.thefrontpage.entity.User;
+import xyz.thefrontpage.entity.UserRole;
+import xyz.thefrontpage.entity.token.ConfirmationToken;
 import xyz.thefrontpage.dto.*;
 import xyz.thefrontpage.repository.ConfirmationTokenRepository;
 import xyz.thefrontpage.repository.UserRepository;
@@ -36,33 +38,33 @@ public class AuthService {
     private Integer jwtExpirationInMinutes;
 
     @Transactional
-    public void register(RegisterInput registerInput) {
-        boolean isUsernameTaken = userRepository.findByUsername(registerInput.getUsername()).isPresent();
+    public void register(RegisterRequest registerRequest) {
+        boolean isUsernameTaken = userRepository.findByUsername(registerRequest.getUsername()).isPresent();
         if (isUsernameTaken) {
             throw new IllegalStateException("Username already taken");
         }
-        User user = new User(registerInput.getUsername(),
-                registerInput.getEmail(),
-                passwordEncoder.encode(registerInput.getPassword()),
+        User user = new User(registerRequest.getUsername(),
+                registerRequest.getEmail(),
+                passwordEncoder.encode(registerRequest.getPassword()),
                 UserRole.USER);
         userRepository.save(user);
         String token = generateVerificationToken(user);
         // TODO hardcoded URL, REST vs. GraphQL
-        mailService.sendMail(new NotificationMail(
+        mailService.sendMail(new MailDto(
                 "User Account Activation",
                 user.getEmail(),
                 "http://localhost:8080/api/auth/confirm?token=" + token));
     }
 
-    public AuthResponse login(LoginInput loginInput) {
+    public Auth login(LoginRequest loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginInput.getUsername(), loginInput.getPassword())
+                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword())
         );
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String token = jwtUtil.generateToken(authentication);
-        return AuthResponse.builder()
+        return Auth.builder()
                 .authToken(token)
-                .username(loginInput.getUsername())
+                .username(loginRequest.getUsername())
                 .expiresAt(Instant.now().plusMillis(jwtUtil.getJwtExpirationInMillis()))
                 .build();
     }

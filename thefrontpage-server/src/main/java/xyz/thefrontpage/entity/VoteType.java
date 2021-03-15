@@ -1,4 +1,4 @@
-package xyz.thefrontpage.domain;
+package xyz.thefrontpage.entity;
 
 import java.util.Arrays;
 

@@ -2,7 +2,7 @@ package xyz.thefrontpage.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import xyz.thefrontpage.domain.User;
+import xyz.thefrontpage.entity.User;
 
 import java.util.Optional;
 

@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CommunityResponse {
+public class CommunityDto {
     private Long id;
     private String name;
     private String description;

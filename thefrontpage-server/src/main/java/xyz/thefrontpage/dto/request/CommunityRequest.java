@@ -1,4 +1,4 @@
-package xyz.thefrontpage.dto;
+package xyz.thefrontpage.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CommunityInput {
+public class CommunityRequest {
     private String name;
     private String description;
     private String username;

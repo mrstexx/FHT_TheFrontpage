@@ -3,11 +3,12 @@ package xyz.thefrontpage.service;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import xyz.thefrontpage.domain.Community;
-import xyz.thefrontpage.domain.Post;
-import xyz.thefrontpage.domain.User;
-import xyz.thefrontpage.dto.PostInput;
-import xyz.thefrontpage.dto.PostResponse;
+import xyz.thefrontpage.dto.request.PostRequest;
+import xyz.thefrontpage.entity.Community;
+import xyz.thefrontpage.entity.Post;
+import xyz.thefrontpage.entity.User;
+import xyz.thefrontpage.dto.PostDto;
+import xyz.thefrontpage.mapper.PostMapper;
 import xyz.thefrontpage.repository.CommunityRepository;
 import xyz.thefrontpage.repository.PostRepository;
 
@@ -25,42 +26,39 @@ public class PostService {
     private final CommunityRepository communityRepository;
 
     @Transactional(readOnly = true)
-    public List<Post> getPosts() {
+    public List<Post> getAllPosts() {
         return postRepository.findAll();
     }
 
     @Transactional(readOnly = true)
-    public List<PostResponse> getAllPosts() {
-        return postRepository.findAll().stream().map(this::mapToDto).collect(Collectors.toList());
-    }
-
-    @Transactional(readOnly = true)
-    public PostResponse getPostById(Long id) {
-        Post post = postRepository.findById(id).orElseThrow(() -> new IllegalStateException("No post found with id - " + id));
-        return mapToDto(post);
+    public Post getPostById(Long id) {
+        Post post = postRepository.findById(id).orElseThrow(
+                () -> new IllegalStateException("No post found with id - " + id));
+        return post;
     }
 
     @Transactional
-    public PostResponse createPost(PostInput postInput) {
+    public Post createPost(PostRequest postRequest) {
         User currentUser = authService.getCurrentUser();
-        Community community = communityRepository.findByName(postInput.getCommunityName())
-                .orElseThrow(() -> new IllegalStateException("Community with the name " + postInput.getCommunityName() + " could not be found."));
-        Post newPost = mapPostOfRequest(postInput, currentUser, community);
+        Community community = communityRepository.findByName(postRequest.getCommunityName())
+                .orElseThrow(() -> new IllegalStateException("Community with the name " +
+                        postRequest.getCommunityName() + " could not be found."));
+        Post newPost = PostMapper.map(postRequest, currentUser, community);
         postRepository.save(newPost);
-        return mapToDto(newPost);
+        return newPost;
     }
 
     @Transactional
-    public void updatePost(PostInput postInput) {
+    public void updatePost(PostRequest postRequest) {
         User currentUser = authService.getCurrentUser();
-        Post post = postRepository.findById(postInput.getId())
-                .orElseThrow(() -> new IllegalStateException("No post found with id - " + postInput.getId()));
+        Post post = postRepository.findById(postRequest.getId())
+                .orElseThrow(() -> new IllegalStateException("No post found with id - " + postRequest.getId()));
         if (!post.getUser().getUsername().equals(currentUser.getUsername())) {
             throw new IllegalStateException("Missing access rights to update post");
         }
-        post.setTitle(postInput.getTitle());
-        post.setBody(postInput.getBody());
-        post.setUrl(postInput.getUrl());
+        post.setTitle(postRequest.getTitle());
+        post.setBody(postRequest.getBody());
+        post.setUrl(postRequest.getUrl());
         postRepository.save(post);
     }
 
@@ -74,32 +72,4 @@ public class PostService {
         }
         postRepository.delete(post);
     }
-
-    private Post mapPostOfRequest(PostInput postInput, User currentUser, Community community) {
-        return Post.builder()
-                .title(postInput.getTitle())
-                .body(postInput.getBody())
-                .createdAt(LocalDateTime.now())
-                .comments(Collections.emptyList())
-                .community(community)
-                .user(currentUser)
-                .voteCount(0)
-                .url(postInput.getUrl())
-                .build();
-    }
-
-    private PostResponse mapToDto(Post post) {
-        return PostResponse.builder()
-                .id(post.getId())
-                .title(post.getTitle())
-                .body(post.getBody())
-                .username(post.getUser().getUsername())
-                .createdAt(post.getCreatedAt())
-                .voteCount(post.getVoteCount())
-                .commentCount(post.getComments().size())
-                .communityName(post.getCommunity().getName())
-                .url(post.getUrl())
-                .build();
-    }
-
 }

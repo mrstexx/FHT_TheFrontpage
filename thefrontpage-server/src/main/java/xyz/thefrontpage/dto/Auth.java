@@ -1,13 +1,18 @@
 package xyz.thefrontpage.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Getter
+import java.time.Instant;
+
+@Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoginInput {
+public class Auth {
+    private String authToken;
     private String username;
-    private String password;
+    private Instant expiresAt;
 }

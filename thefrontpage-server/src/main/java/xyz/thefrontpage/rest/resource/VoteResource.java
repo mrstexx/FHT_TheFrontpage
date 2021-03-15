@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import xyz.thefrontpage.dto.VoteInput;
+import xyz.thefrontpage.dto.request.VoteRequest;
 import xyz.thefrontpage.service.VoteService;
 
 @RestController
@@ -18,8 +18,8 @@ public class VoteResource {
     private final VoteService voteService;
 
     @PostMapping("/")
-    public ResponseEntity<?> vote(@RequestBody VoteInput voteInput) {
-        voteService.vote(voteInput);
+    public ResponseEntity<?> vote(@RequestBody VoteRequest voteRequest) {
+        voteService.vote(voteRequest);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 

@@ -1,4 +1,4 @@
-package xyz.thefrontpage.domain;
+package xyz.thefrontpage.entity;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

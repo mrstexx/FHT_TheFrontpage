@@ -3,9 +3,8 @@ package xyz.thefrontpage.graphql.resolver;
 import graphql.kickstart.tools.GraphQLQueryResolver;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
-import xyz.thefrontpage.domain.Post;
-import xyz.thefrontpage.dto.PostResponse;
-import xyz.thefrontpage.service.PostService;
+import xyz.thefrontpage.entity.Post;
+import xyz.thefrontpage.repository.PostRepository;
 
 import java.util.List;
 
@@ -13,10 +12,10 @@ import java.util.List;
 @AllArgsConstructor
 public class PostResolver implements GraphQLQueryResolver {
 
-    private final PostService postService;
+    private final PostRepository postRepository;
 
     public List<Post> allPosts() {
-        return postService.getPosts();
+        return postRepository.findAll();
     }
 
 }

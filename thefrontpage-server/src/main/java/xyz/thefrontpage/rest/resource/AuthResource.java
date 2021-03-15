@@ -4,9 +4,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import xyz.thefrontpage.dto.AuthResponse;
-import xyz.thefrontpage.dto.LoginInput;
-import xyz.thefrontpage.dto.RegisterInput;
+import xyz.thefrontpage.dto.Auth;
+import xyz.thefrontpage.dto.request.LoginRequest;
+import xyz.thefrontpage.dto.request.RegisterRequest;
 import xyz.thefrontpage.service.AuthService;
 
 @RestController
@@ -17,8 +17,8 @@ public class AuthResource {
     private final AuthService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody RegisterInput registerInput) {
-        authService.register(registerInput);
+    public ResponseEntity<String> register(@RequestBody RegisterRequest registerRequest) {
+        authService.register(registerRequest);
         return new ResponseEntity<>("User registration was successful", HttpStatus.OK);
     }
 
@@ -29,9 +29,9 @@ public class AuthResource {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@RequestBody LoginInput loginInput) {
-        AuthResponse authResponse = authService.login(loginInput);
-        return new ResponseEntity<>(authResponse, HttpStatus.OK);
+    public ResponseEntity<Auth> login(@RequestBody LoginRequest loginRequest) {
+        Auth auth = authService.login(loginRequest);
+        return new ResponseEntity<>(auth, HttpStatus.OK);
     }
 
     @PostMapping("/logout")

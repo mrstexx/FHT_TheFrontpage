@@ -2,9 +2,9 @@ package xyz.thefrontpage.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import xyz.thefrontpage.domain.Post;
-import xyz.thefrontpage.domain.User;
-import xyz.thefrontpage.domain.Vote;
+import xyz.thefrontpage.entity.Post;
+import xyz.thefrontpage.entity.User;
+import xyz.thefrontpage.entity.Vote;
 
 import java.util.Optional;
 

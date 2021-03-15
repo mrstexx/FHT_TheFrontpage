@@ -1,8 +1,8 @@
-package xyz.thefrontpage.domain.token;
+package xyz.thefrontpage.entity.token;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import xyz.thefrontpage.domain.User;
+import xyz.thefrontpage.entity.User;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;

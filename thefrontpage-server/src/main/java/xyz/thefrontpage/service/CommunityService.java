@@ -3,10 +3,11 @@ package xyz.thefrontpage.service;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import xyz.thefrontpage.domain.Community;
-import xyz.thefrontpage.domain.User;
-import xyz.thefrontpage.dto.CommunityInput;
-import xyz.thefrontpage.dto.CommunityResponse;
+import xyz.thefrontpage.entity.Community;
+import xyz.thefrontpage.entity.User;
+import xyz.thefrontpage.dto.request.CommunityRequest;
+import xyz.thefrontpage.dto.CommunityDto;
+import xyz.thefrontpage.mapper.CommunityMapper;
 import xyz.thefrontpage.repository.CommunityRepository;
 
 import java.time.LocalDateTime;
@@ -22,40 +23,40 @@ public class CommunityService {
     private final AuthService authService;
 
     @Transactional(readOnly = true)
-    public List<CommunityResponse> getAllCommunities() {
-        return communityRepository.findAll().stream().map(this::mapToDto).collect(Collectors.toList());
+    public List<Community> getAllCommunities() {
+        return communityRepository.findAll();
     }
 
     @Transactional(readOnly = true)
-    public CommunityResponse getCommunityByName(String communityName) {
+    public Community getCommunityByName(String communityName) {
         Community community = communityRepository.findByName(communityName)
                 .orElseThrow(() -> new IllegalStateException("No community found with the name: " + communityName));
-        return mapToDto(community);
+        return community;
     }
 
     @Transactional
-    public CommunityResponse createCommunity(CommunityInput communityInput) {
-        boolean existsCommunity = communityRepository.findByName(communityInput.getName()).isPresent();
+    public Community createCommunity(CommunityRequest communityRequest) {
+        boolean existsCommunity = communityRepository.findByName(communityRequest.getName()).isPresent();
         if (existsCommunity) {
-            throw new IllegalStateException("Community with the name '" + communityInput.getName() + "' already exists");
+            throw new IllegalStateException("Community with the name '" + communityRequest.getName() + "' already exists");
         }
         User currentUser = authService.getCurrentUser();
-        Community newCommunity = mapCommunityOfRequest(communityInput, currentUser);
+        Community newCommunity = CommunityMapper.map(communityRequest, currentUser);
         communityRepository.save(newCommunity);
-        return mapToDto(newCommunity);
+        return newCommunity;
     }
 
     @Transactional
-    public void updateCommunity(CommunityInput communityInput) {
-        String communityName = communityInput.getName();
+    public void updateCommunity(CommunityRequest communityRequest) {
+        String communityName = communityRequest.getName();
         Community community = communityRepository.findByName(communityName)
                 .orElseThrow(() -> new IllegalStateException("No community found with the name: " + communityName));
         User currentUser = authService.getCurrentUser();
         if (!community.getUser().getUsername().equals(currentUser.getUsername())) {
             throw new IllegalStateException("Missing access rights to update community");
         }
-        community.setDescription(communityInput.getDescription());
-        community.setName(communityInput.getName());
+        community.setDescription(communityRequest.getDescription());
+        community.setName(communityRequest.getName());
         communityRepository.save(community);
     }
 
@@ -69,24 +70,4 @@ public class CommunityService {
         }
         communityRepository.delete(community);
     }
-
-    private CommunityResponse mapToDto(Community community) {
-        return CommunityResponse.builder()
-                .id(community.getId())
-                .name(community.getName())
-                .description(community.getDescription())
-                .username(community.getUser().getUsername())
-                .build();
-    }
-
-    private Community mapCommunityOfRequest(CommunityInput communityInput, User user) {
-        return Community.builder()
-                .name(communityInput.getName())
-                .description(communityInput.getDescription())
-                .user(user)
-                .createdAt(LocalDateTime.now())
-                .posts(Collections.emptyList())
-                .build();
-    }
-
 }

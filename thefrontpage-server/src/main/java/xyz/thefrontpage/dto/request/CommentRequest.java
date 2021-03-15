@@ -1,4 +1,4 @@
-package xyz.thefrontpage.dto;
+package xyz.thefrontpage.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,17 +8,13 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class PostResponse {
+public class CommentRequest {
     private Long id;
-    private String username;
-    private String communityName;
-    private String title;
-    private String url;
+    private Long postId;
     private String body;
+    private String username;
     private LocalDateTime createdAt;
-    private Integer voteCount;
-    private Integer commentCount;
 }

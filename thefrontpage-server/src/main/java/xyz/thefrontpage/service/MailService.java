@@ -8,7 +8,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import xyz.thefrontpage.dto.NotificationMail;
+import xyz.thefrontpage.dto.MailDto;
 import xyz.thefrontpage.util.MailContentBuilder;
 
 @Service
@@ -20,7 +20,7 @@ public class MailService {
     private final MailContentBuilder mailContentBuilder;
 
     @Async
-    public void sendMail(NotificationMail mail) {
+    public void sendMail(MailDto mail) {
         MimeMessagePreparator messagePrep = mimeMessage -> {
             MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, "utf-8");
             messageHelper.setFrom("auth@thefrontpage.xyz");
