@@ -41,6 +41,12 @@ type Vote {
     user: User
 }
 
+type Auth {
+    authToken: String!
+    username: String!
+    expiresAt: String!
+}
+
 enum VoteType {
     UP_VOTE
     DOWN_VOTE
@@ -94,6 +100,9 @@ type Mutation {
     updateComment(input: CommentRequest): Boolean
     deleteComment(commentId: ID): Boolean
     vote(input: VoteRequest): Boolean
+    login(input: LoginRequest): Auth
+    register(input: RegisterRequest): Boolean
+    confirmToken(token: String): Boolean
 }
 
 # All available queries on this graphql server

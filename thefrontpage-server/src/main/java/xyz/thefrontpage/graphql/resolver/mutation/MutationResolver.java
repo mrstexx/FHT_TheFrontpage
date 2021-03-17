@@ -3,26 +3,37 @@ package xyz.thefrontpage.graphql.resolver.mutation;
 import graphql.kickstart.tools.GraphQLMutationResolver;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
-import xyz.thefrontpage.dto.request.CommentRequest;
-import xyz.thefrontpage.dto.request.CommunityRequest;
-import xyz.thefrontpage.dto.request.PostRequest;
-import xyz.thefrontpage.dto.request.VoteRequest;
+import xyz.thefrontpage.dto.Auth;
+import xyz.thefrontpage.dto.request.*;
 import xyz.thefrontpage.entity.Comment;
 import xyz.thefrontpage.entity.Community;
 import xyz.thefrontpage.entity.Post;
-import xyz.thefrontpage.service.CommentService;
-import xyz.thefrontpage.service.CommunityService;
-import xyz.thefrontpage.service.PostService;
-import xyz.thefrontpage.service.VoteService;
+import xyz.thefrontpage.service.*;
 
 @Component
 @AllArgsConstructor
 public class MutationResolver implements GraphQLMutationResolver {
 
+    private final AuthService authService;
     private final CommunityService communityService;
     private final PostService postService;
     private final CommentService commentService;
     private final VoteService voteService;
+
+    /* AUTH MUTATIONS */
+    public Auth login(LoginRequest loginRequest) {
+        return authService.login(loginRequest);
+    }
+
+    public boolean register(RegisterRequest registerRequest) {
+        authService.register(registerRequest);
+        return true;
+    }
+
+    public boolean confirmToken(String token) {
+        authService.confirmToken(token);
+        return true;
+    }
 
     /* COMMUNITY MUTATIONS */
     public Community createCommunity(CommunityRequest communityRequest) {
