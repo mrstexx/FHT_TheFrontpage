@@ -1,4 +1,4 @@
-package xyz.thefrontpage.graphql.resolver;
+package xyz.thefrontpage.graphql.resolver.query;
 
 import graphql.kickstart.tools.GraphQLResolver;
 import lombok.AllArgsConstructor;

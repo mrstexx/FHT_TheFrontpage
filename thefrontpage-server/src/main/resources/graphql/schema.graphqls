@@ -46,11 +46,48 @@ enum VoteType {
     DOWN_VOTE
 }
 
-input PostInput {
+input RegisterRequest {
+    username: String!
+    password: String!
+    email: String!
+}
+
+input LoginRequest {
+    username: String!
+    password: String!
+}
+
+input PostRequest {
+    username: String!
+    communityName: String!
     title: String!
-    description: String
     url: String
-    createdAt: String!
+    body: String
+}
+
+input CommentRequest {
+    postId: ID!
+    body: String!
+    username: String!
+}
+
+input CommunityRequest {
+    name: String!
+    description: String
+    username: String!
+}
+
+input VoteRequest {
+    voteType: VoteType!
+    postId: ID!
+}
+
+# All available mutations on this graphql server
+type Mutation {
+    createCommunity(input: CommunityRequest): Community!
+    createPost(input: PostRequest): Post!
+    createComment(input: CommentRequest): Comment!
+    vote(input: VoteRequest): Boolean
 }
 
 # All available queries on this graphql server
@@ -64,4 +101,5 @@ type Query {
 
 schema {
     query: Query
+    mutation: Mutation
 }

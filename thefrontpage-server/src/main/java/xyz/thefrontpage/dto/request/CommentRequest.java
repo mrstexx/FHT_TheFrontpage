@@ -16,5 +16,4 @@ public class CommentRequest {
     private Long postId;
     private String body;
     private String username;
-    private LocalDateTime createdAt;
 }
