@@ -21,7 +21,7 @@ public class CommunityResource {
     private final CommunityService communityService;
 
     @GetMapping("/")
-    public ResponseEntity<List<CommunityDto>> getAllPosts() {
+    public ResponseEntity<List<CommunityDto>> getAllCommunities() {
         List<CommunityDto> communitiesDto = communityService.getAllCommunities()
                 .stream().map(CommunityMapper::mapToDto).collect(Collectors.toList());
         return ResponseEntity.status(HttpStatus.OK).body(communitiesDto);

@@ -39,9 +39,9 @@ jwt:
     confirmation: 15
 
 graphql:
-  servlet:
-    max-query-depth: 5
+#  servlet:
+#    max-query-depth: 5
   playground:
-    headers:
-      Authorization: Bearer TOKEN
+#    headers:
+#      Authorization: Bearer TOKEN
     enabled: true

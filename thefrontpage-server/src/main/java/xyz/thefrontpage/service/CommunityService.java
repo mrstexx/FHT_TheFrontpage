@@ -34,6 +34,11 @@ public class CommunityService {
         return community;
     }
 
+    @Transactional(readOnly = true)
+    public Community getCommunityById(Long id) {
+        return communityRepository.findById(id).orElseThrow(() -> new IllegalStateException("Community could not be found"));
+    }
+
     @Transactional
     public Community createCommunity(CommunityRequest communityRequest) {
         boolean existsCommunity = communityRepository.findByName(communityRequest.getName()).isPresent();

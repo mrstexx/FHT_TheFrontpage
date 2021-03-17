@@ -37,6 +37,11 @@ public class PostService {
         return post;
     }
 
+    @Transactional(readOnly = true)
+    public List<Post> getAllByCommunityId(Long communityId) {
+        return postRepository.findAllByCommunityId(communityId);
+    }
+
     @Transactional
     public Post createPost(PostRequest postRequest) {
         User currentUser = authService.getCurrentUser();

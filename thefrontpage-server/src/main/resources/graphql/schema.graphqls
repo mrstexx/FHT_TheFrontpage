@@ -53,17 +53,15 @@ input PostInput {
     createdAt: String!
 }
 
-#type Mutation {
-#    createPost(post: PostRequest): Post
-#}
-
 # All available queries on this graphql server
 type Query {
-    allPosts: [Post]
-    # allUsers: [User]
+    getAllPosts: [Post]
+    getPostById(id: ID): Post
+    getAllCommunities: [Community]
+    getCommunityByName(name: String): Community
+    getCommentsByPostId(postId: ID): [Comment]
 }
 
 schema {
     query: Query
-    #  mutation: Mutation
 }
