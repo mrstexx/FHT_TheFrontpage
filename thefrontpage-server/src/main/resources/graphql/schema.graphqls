@@ -85,8 +85,14 @@ input VoteRequest {
 # All available mutations on this graphql server
 type Mutation {
     createCommunity(input: CommunityRequest): Community!
+    updateCommunity(input: CommunityRequest): Boolean
+    deleteCommunity(name: String): Boolean
     createPost(input: PostRequest): Post!
+    updatePost(input: PostRequest): Boolean
+    deletePost(postId: ID): Boolean
     createComment(input: CommentRequest): Comment!
+    updateComment(input: CommentRequest): Boolean
+    deleteComment(commentId: ID): Boolean
     vote(input: VoteRequest): Boolean
 }
 
