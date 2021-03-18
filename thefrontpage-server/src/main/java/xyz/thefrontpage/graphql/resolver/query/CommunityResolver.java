@@ -18,12 +18,16 @@ public class CommunityResolver implements GraphQLResolver<Community> {
     private final UserService userService;
     private final PostService postService;
 
-    public User user(Community community) {
-        return userService.getUserById(community.getUser().getId());
+    public User createdBy(Community community) {
+        return userService.getUserById(community.getCreatedBy().getId());
     }
 
     public List<Post> posts(Community community) {
         return postService.getAllByCommunityId(community.getId());
+    }
+
+    public List<User> members(Community community) {
+        return userService.getAllByCommunityId(community.getId());
     }
 
 }

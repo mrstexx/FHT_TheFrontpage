@@ -14,7 +14,7 @@ public class CommunityMapper {
                 .id(community.getId())
                 .name(community.getName())
                 .description(community.getDescription())
-                .username(community.getUser().getUsername())
+                .createdBy(community.getCreatedBy().getUsername())
                 .build();
     }
 
@@ -22,7 +22,7 @@ public class CommunityMapper {
         return Community.builder()
                 .name(communityRequest.getName())
                 .description(communityRequest.getDescription())
-                .user(user)
+                .createdBy(user)
                 .createdAt(LocalDateTime.now())
                 .posts(Collections.emptyList())
                 .build();

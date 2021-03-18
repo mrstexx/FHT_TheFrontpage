@@ -1,6 +1,7 @@
 package xyz.thefrontpage.entity;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -10,11 +11,13 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Set;
 
 @Data
 @Entity
 @Table(name = "t_user")
 @NoArgsConstructor
+@EqualsAndHashCode(exclude = "communities")
 public class User implements UserDetails {
 
     @Id
@@ -33,6 +36,18 @@ public class User implements UserDetails {
     @Column(name = "user_role")
     @Enumerated(EnumType.STRING)
     private UserRole userRole;
+
+    @ManyToMany(
+            cascade = {
+                    CascadeType.ALL
+            },
+            fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "t_user_community",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "community_id")
+    )
+    private Set<Community> communities;
 
     private Boolean locked = false;
     private Boolean enabled = false;

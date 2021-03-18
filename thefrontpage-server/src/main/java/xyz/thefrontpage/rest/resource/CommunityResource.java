@@ -51,4 +51,16 @@ public class CommunityResource {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
+    @PostMapping("/{communityName}/follow")
+    public ResponseEntity<?> followCommunity(@PathVariable String communityName) {
+        communityService.followCommunity(communityName);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @PostMapping("/{communityName}/unfollow")
+    public ResponseEntity<?> unfollowCommunity(@PathVariable String communityName) {
+        communityService.unfollowCommunity(communityName);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
 }

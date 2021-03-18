@@ -13,5 +13,5 @@ public class CommunityDto {
     private Long id;
     private String name;
     private String description;
-    private String username;
+    private String createdBy;
 }

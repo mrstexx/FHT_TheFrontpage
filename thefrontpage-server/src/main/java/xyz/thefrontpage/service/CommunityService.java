@@ -3,17 +3,14 @@ package xyz.thefrontpage.service;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import xyz.thefrontpage.dto.request.CommunityRequest;
 import xyz.thefrontpage.entity.Community;
 import xyz.thefrontpage.entity.User;
-import xyz.thefrontpage.dto.request.CommunityRequest;
-import xyz.thefrontpage.dto.CommunityDto;
 import xyz.thefrontpage.mapper.CommunityMapper;
 import xyz.thefrontpage.repository.CommunityRepository;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -39,6 +36,10 @@ public class CommunityService {
         return communityRepository.findById(id).orElseThrow(() -> new IllegalStateException("Community could not be found"));
     }
 
+    public List<Community> getAllCommunitiesByUserId(Long userId) {
+        return communityRepository.findAllByMembers_Id(userId);
+    }
+
     @Transactional
     public Community createCommunity(CommunityRequest communityRequest) {
         boolean existsCommunity = communityRepository.findByName(communityRequest.getName()).isPresent();
@@ -57,7 +58,7 @@ public class CommunityService {
         Community community = communityRepository.findByName(communityName)
                 .orElseThrow(() -> new IllegalStateException("No community found with the name: " + communityName));
         User currentUser = authService.getCurrentUser();
-        if (!community.getUser().getUsername().equals(currentUser.getUsername())) {
+        if (!community.getCreatedBy().getUsername().equals(currentUser.getUsername())) {
             throw new IllegalStateException("Missing access rights to update community");
         }
         community.setDescription(communityRequest.getDescription());
@@ -70,9 +71,27 @@ public class CommunityService {
         Community community = communityRepository.findByName(communityName)
                 .orElseThrow(() -> new IllegalStateException("No community found with the name: " + communityName));
         User currentUser = authService.getCurrentUser();
-        if (!community.getUser().getUsername().equals(currentUser.getUsername())) {
+        if (!community.getCreatedBy().getUsername().equals(currentUser.getUsername())) {
             throw new IllegalStateException("Missing access rights to delete community");
         }
         communityRepository.delete(community);
+    }
+
+    @Transactional
+    public void followCommunity(String communityName) {
+        Community community = this.getCommunityByName(communityName);
+        User user = authService.getCurrentUser();
+        community.getMembers().add(user);
+        user.getCommunities().add(community);
+        communityRepository.save(community);
+    }
+
+    @Transactional
+    public void unfollowCommunity(String communityName) {
+        Community community = this.getCommunityByName(communityName);
+        User user = authService.getCurrentUser();
+        community.getMembers().remove(user);
+        user.getCommunities().remove(community);
+        communityRepository.save(community);
     }
 }

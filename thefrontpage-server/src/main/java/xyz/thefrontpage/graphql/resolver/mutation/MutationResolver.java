@@ -50,6 +50,16 @@ public class MutationResolver implements GraphQLMutationResolver {
         return true;
     }
 
+    public boolean followCommunity(String name) {
+        communityService.followCommunity(name);
+        return true;
+    }
+
+    public boolean unfollowCommunity(String name) {
+        communityService.unfollowCommunity(name);
+        return true;
+    }
+
     /* POST MUTATIONS */
     public Post createPost(PostRequest postRequest) {
         return postService.createPost(postRequest);

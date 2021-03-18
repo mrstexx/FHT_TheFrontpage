@@ -31,6 +31,13 @@ public class PostResource {
         return ResponseEntity.status(HttpStatus.OK).body(PostMapper.mapToDto(postService.getPostById(id)));
     }
 
+    @GetMapping("/findByCommunity/{name}")
+    public ResponseEntity<List<PostDto>> getPostsByCommunityName(@PathVariable String name) {
+        List<PostDto> allPosts = postService.getAllByCommunityName(name)
+                .stream().map(PostMapper::mapToDto).collect(Collectors.toList());
+        return ResponseEntity.status(HttpStatus.OK).body(allPosts);
+    }
+
     @PostMapping("/")
     public ResponseEntity<PostDto> createPost(@RequestBody PostRequest postRequest) {
         PostDto post = PostMapper.mapToDto(postService.createPost(postRequest));

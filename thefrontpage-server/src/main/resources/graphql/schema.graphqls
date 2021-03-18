@@ -3,6 +3,7 @@ type User {
     username: String!
     email: String!
     createdAt: String!
+    communities: [Community]
 }
 
 type Community {
@@ -11,7 +12,8 @@ type Community {
     description: String
     createdAt: String!
     posts: [Post]
-    user: User
+    createdBy: User
+    members: [User]
 }
 
 type Post {
@@ -93,6 +95,8 @@ type Mutation {
     createCommunity(input: CommunityRequest): Community!
     updateCommunity(input: CommunityRequest): Boolean
     deleteCommunity(name: String): Boolean
+    followCommunity(name: String): Boolean
+    unfollowCommunity(name: String): Boolean
     createPost(input: PostRequest): Post!
     updatePost(input: PostRequest): Boolean
     deletePost(postId: ID): Boolean

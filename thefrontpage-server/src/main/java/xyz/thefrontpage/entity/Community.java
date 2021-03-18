@@ -1,13 +1,11 @@
 package xyz.thefrontpage.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Entity
@@ -15,6 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@EqualsAndHashCode(exclude = "members")
 public class Community {
 
     @Id
@@ -31,10 +30,17 @@ public class Community {
     private LocalDateTime createdAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private User user;
+    @JoinColumn(name = "created_by_id", referencedColumnName = "id")
+    private User createdBy;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, mappedBy = "community")
     private List<Post> posts;
 
+    @ManyToMany(
+            mappedBy = "communities",
+            cascade = {
+                    CascadeType.ALL
+            },
+            fetch = FetchType.LAZY)
+    private Set<User> members;
 }

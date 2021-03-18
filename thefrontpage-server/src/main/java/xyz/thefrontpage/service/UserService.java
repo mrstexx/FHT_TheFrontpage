@@ -6,6 +6,8 @@ import org.springframework.transaction.annotation.Transactional;
 import xyz.thefrontpage.entity.User;
 import xyz.thefrontpage.repository.UserRepository;
 
+import java.util.List;
+
 @Service
 @AllArgsConstructor
 public class UserService {
@@ -22,6 +24,11 @@ public class UserService {
     public User getUserById(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalStateException("User ID could not be found"));
+    }
+
+    @Transactional(readOnly = true)
+    public List<User> getAllByCommunityId(Long communityId) {
+        return userRepository.findAllByCommunities_Id(communityId);
     }
 
 }
