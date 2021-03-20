@@ -4,7 +4,17 @@ import { Button, Grid, Icon, Image } from 'semantic-ui-react';
 
 import './post.css';
 
-const PostElement = () => {
+const PostElement = (props) => {
+  const {
+    id,
+    title,
+    url,
+    createdAt,
+    voteCount,
+    user,
+    comments,
+    communityName
+  } = props;
   return (
     <Grid.Row className="post-base">
       <div
@@ -18,29 +28,26 @@ const PostElement = () => {
             <Button basic icon>
               <Icon name="thumbs up outline" />
             </Button>
-            <span className="post-vote-count">10k</span>
+            <span className="post-vote-count">{voteCount}</span>
             <Button basic icon>
               <Icon name="thumbs down outline" />
             </Button>
           </div>
           <div className="post-body">
             <div className="post-body-header">
-              Posted in <Link to="/">c/programming</Link> by{' '}
-              <Link to="/">mrstexx</Link> at <b>14:03</b>
+              Posted in{' '}
+              <Link to={`/community/${communityName}`}>c/{communityName}</Link>{' '}
+              by <Link to="/">{user ? user.username : ''}</Link> at{' '}
+              <b>{new Date(createdAt).toLocaleString()}</b>
             </div>
-            <div className="post-body-title">
-              What is the best programming language in 2021?
-            </div>
+            <div className="post-body-title">{title}</div>
             <div className="post-body-image">
-              <Image
-                src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Test-Logo.svg/783px-Test-Logo.svg.png"
-                wrapped
-                rounded
-              />
+              <Image src={url} wrapped rounded />
             </div>
             <div className="post-body-footer">
               <Link to="/post">
-                <Icon name="comments outline" /> 5.4k Comments
+                <Icon name="comments outline" />{' '}
+                {comments ? comments.length : 0} Comments
               </Link>
             </div>
           </div>

@@ -8,15 +8,62 @@ const getAllCommunities = async () => {
         getAllCommunities {
           id
           name
-          description 
+          description
         }
       }
     `
   });
-  let { getAllCommunities } = res.data.data;
+  const resData = res.data;
+  if (resData.error && resData.error > 0) {
+    console.error(resData.error);
+    return [];
+  }
+  let { getAllCommunities } = resData.data;
   return getAllCommunities;
 };
 
+const getCommunityByName = async (name) => {
+  let res = await axios.post(config.graphql.url, {
+    query: `
+      query {
+        getCommunityByName(name: "${name}") {
+          id
+          name
+          description
+          createdAt
+          createdBy {
+            username
+          }
+          members {
+            username
+          }
+          posts {
+              id
+              title
+              url
+              createdAt
+              user {
+                username
+              }
+              voteCount
+              comments {
+                id
+              }
+          }
+        }
+      }
+    `
+  });
+  const resData = res.data;
+  if (resData.error && resData.error > 0) {
+    console.error(resData.error);
+    return {};
+  }
+  let { getCommunityByName } = resData.data;
+  return getCommunityByName;
+};
+
 export default {
-  getAllCommunities
+  getAllCommunities,
+  getCommunityByName
 };

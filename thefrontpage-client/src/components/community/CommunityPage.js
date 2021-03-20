@@ -1,36 +1,57 @@
+import { Link } from '@reach/router';
 import React, { useEffect, useState } from 'react';
-import { Divider, List } from 'semantic-ui-react';
+import { Divider, Grid, Icon, Label } from 'semantic-ui-react';
 import DataManager from '../../data/DataManager';
+import CreatePost from '../post/CreatePost';
+import PostElement from '../post/PostElement';
 
 import './community.css';
 
-const CommunityPage = () => {
-  const [communities, setCommunities] = useState([]);
+const initState = {
+  createdBy: {},
+  members: []
+};
+
+const CommunityPage = (props) => {
+  const { communityName } = props;
+  const [community, setCommunity] = useState(initState);
   useEffect(() => {
     const fetchData = async () => {
-      const data = await DataManager.getAllCommunities();
-      setCommunities(data);
+      const data = await DataManager.getCommunityByName(communityName);
+      setCommunity(data);
     };
     fetchData();
-  }, []);
-
+  }, [communityName]);
   return (
     <div>
-      <h1>List of Communities</h1>
+      <h2>@{community.name}</h2>
+      <p>{community.description}</p>
+      <span>
+        Active Members{' '}
+        {community.members && (
+          <Label>
+            <Icon name="users" />
+            {community.members.length}
+          </Label>
+        )}
+         - created by <Link to="/">{community.createdBy.username}</Link>
+      </span>
       <Divider />
-      <div className="community-content">
-        <List>
-          {communities.map((community) => (
-            <List.Item key={community.id}>
-              <List.Icon name="newspaper outline" />
-              <List.Content>
-                <List.Header as="a">{community.name}</List.Header>
-                <List.Description>{community.description}</List.Description>
-              </List.Content>
-            </List.Item>
+      <Grid>
+        <Grid.Row>
+          <CreatePost />
+        </Grid.Row>
+        {community.posts &&
+          community.posts.map((post) => (
+            <PostElement
+              key={post.id}
+              {...{
+                ...post,
+                communityName
+              }}
+            />
           ))}
-        </List>
-      </div>
+      </Grid>
     </div>
   );
 };

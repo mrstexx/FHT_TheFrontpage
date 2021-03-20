@@ -9,6 +9,7 @@ import Register from './components/auth/Register';
 import UserPage from './components/auth/UserPage';
 import NotFound from './NotFound';
 import PostPage from './components/post/PostPage';
+import CommunityList from './components/community/CommunityList';
 import CommunityPage from './components/community/CommunityPage';
 
 import 'semantic-ui-css/semantic.min.css';
@@ -31,7 +32,8 @@ function App() {
           <FrontPage path="/" />
           <FrontPage path="/feed" />
           <PostPage path="/post" />
-          <CommunityPage path="/community" />
+          <CommunityList path="/community" />
+          <CommunityPage path="/community/:communityName" />
           <Login path="/login" />
           <Register path="/signup" />
           <UserPage path="/user" />

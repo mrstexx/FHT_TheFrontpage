@@ -6,11 +6,11 @@ const Header = () => {
   const [activeItem, setActiveItem] = useState('home');
   const handleItemClick = (e, { name }) => {
     setActiveItem(name);
-    navigate(name);
+    navigate(name.length > 0 ? `../${name}` : '../');
   };
   return (
     <Menu fixed="top" fluid>
-      <Menu.Item name="/" onClick={handleItemClick}>
+      <Menu.Item name="" onClick={handleItemClick}>
         <b>
           <i className="hashtag icon"></i>TheFrontpage
         </b>
