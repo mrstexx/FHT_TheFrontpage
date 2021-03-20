@@ -15,5 +15,4 @@ public class CommentRequest {
     private Long id;
     private Long postId;
     private String body;
-    private String username;
 }

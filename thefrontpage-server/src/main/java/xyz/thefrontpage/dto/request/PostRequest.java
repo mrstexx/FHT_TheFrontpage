@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PostRequest {
     private Long id;
-    private String username;
     private String communityName;
     private String title;
     private String url;

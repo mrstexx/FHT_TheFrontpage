@@ -1,6 +1,5 @@
 import React from 'react';
 import { Grid } from 'semantic-ui-react';
-import CreatePost from '../post/CreatePost';
 import PostElement from '../post/PostElement';
 
 class FrontPage extends React.Component {
@@ -10,13 +9,13 @@ class FrontPage extends React.Component {
 
   render() {
     return (
-      <Grid>
-        <Grid.Row>
-          <CreatePost />
-        </Grid.Row>
-        <PostElement />
-        <PostElement />
-      </Grid>
+      <div>
+        <h2>Latest posts</h2>
+        <Grid>
+          <PostElement />
+          <PostElement />
+        </Grid>
+      </div>
     );
   }
 }

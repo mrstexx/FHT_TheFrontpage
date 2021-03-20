@@ -45,7 +45,7 @@ const PostElement = (props) => {
               <Image src={url} wrapped rounded />
             </div>
             <div className="post-body-footer">
-              <Link to="/post">
+              <Link to={`/post/${id}`}>
                 <Icon name="comments outline" />{' '}
                 {comments ? comments.length : 0} Comments
               </Link>

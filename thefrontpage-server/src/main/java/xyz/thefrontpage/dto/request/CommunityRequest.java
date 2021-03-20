@@ -12,5 +12,4 @@ import lombok.NoArgsConstructor;
 public class CommunityRequest {
     private String name;
     private String description;
-    private String username;
 }

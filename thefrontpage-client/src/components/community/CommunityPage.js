@@ -22,6 +22,19 @@ const CommunityPage = (props) => {
     };
     fetchData();
   }, [communityName]);
+
+  const onCreateNewPost = async (reqData) => {
+    const res = await DataManager.createPost({
+      ...reqData,
+      communityName
+    });
+    const { posts } = community;
+    posts.push(res);
+    setCommunity({
+      ...community
+    });
+  };
+
   return (
     <div>
       <h2>@{community.name}</h2>
@@ -34,23 +47,34 @@ const CommunityPage = (props) => {
             {community.members.length}
           </Label>
         )}
-         - created by <Link to="/">{community.createdBy.username}</Link>
+        - created by <Link to="/">{community.createdBy.username}</Link> at{' '}
+        {new Date(community.createdAt).toLocaleString()}
       </span>
       <Divider />
       <Grid>
         <Grid.Row>
-          <CreatePost />
+          <CreatePost
+            {...{
+              onCreateNewPost: onCreateNewPost
+            }}
+          />
         </Grid.Row>
         {community.posts &&
-          community.posts.map((post) => (
-            <PostElement
-              key={post.id}
-              {...{
-                ...post,
-                communityName
-              }}
-            />
-          ))}
+          community.posts
+            .sort(
+              (first, second) =>
+                new Date(second.createdAt) - new Date(first.createdAt)
+            )
+            .map((post) => (
+              <PostElement
+                key={post.id}
+                {...{
+                  ...post,
+                  communityName,
+                  onCreateNewPost
+                }}
+              />
+            ))}
       </Grid>
     </div>
   );
