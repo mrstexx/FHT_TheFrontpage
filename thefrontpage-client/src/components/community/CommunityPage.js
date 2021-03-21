@@ -1,7 +1,11 @@
 import { Link } from '@reach/router';
 import React, { useEffect, useState } from 'react';
 import { Divider, Grid, Icon, Label } from 'semantic-ui-react';
-import { CommunityService, PostService } from '../../services/DataService';
+import {
+  CommunityService,
+  PostService,
+  AuthService
+} from '../../services/DataService';
 import CreatePost from '../post/CreatePost';
 import PostElement from '../post/PostElement';
 
@@ -25,6 +29,11 @@ const CommunityPage = (props) => {
 
   const onCreateNewPost = async (reqData) => {
     if (!reqData.title) {
+      alert('Field "title" is required to create a new field');
+      return;
+    }
+    if (!AuthService.isUserLoggedIn()) {
+      alert('You must be logged in to create a post');
       return;
     }
     const res = await PostService.createPost({

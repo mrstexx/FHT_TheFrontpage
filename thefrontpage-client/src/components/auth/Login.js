@@ -1,4 +1,5 @@
 import { Link, navigate } from '@reach/router';
+import { isEmpty } from 'lodash';
 import React, { useState } from 'react';
 import { Button, Form, Grid, Header } from 'semantic-ui-react';
 
@@ -17,6 +18,10 @@ const Login = () => {
   };
 
   const onLogin = async () => {
+    if (isEmpty(username) || isEmpty(password)) {
+      alert('Please fill in all required fields.');
+      return;
+    }
     const res = await AuthService.login({
       username,
       password
