@@ -1,18 +1,9 @@
 import axios from 'axios';
 import config from '../../config';
 
-const token = '';
-const reqConfig = {
-  headers: {
-    Authorization: `Bearer ${token}`
-  }
-};
-
 const getAllCommunities = async () => {
-  let res = await axios.post(
-    config.graphql.url,
-    {
-      query: `
+  let res = await axios.post(config.graphql.url, {
+    query: `
       query {
         getAllCommunities {
           id
@@ -21,9 +12,7 @@ const getAllCommunities = async () => {
         }
       }
     `
-    },
-    reqConfig
-  );
+  });
   const resData = res.data;
   if (resData.errors && resData.errors.length > 0) {
     console.error(resData.errors);
@@ -34,10 +23,8 @@ const getAllCommunities = async () => {
 };
 
 const getCommunityByName = async (name) => {
-  let res = await axios.post(
-    config.graphql.url,
-    {
-      query: `
+  let res = await axios.post(config.graphql.url, {
+    query: `
       query {
         getCommunityByName(name: "${name}") {
           id
@@ -66,9 +53,7 @@ const getCommunityByName = async (name) => {
         }
       }
     `
-    },
-    reqConfig
-  );
+  });
   const resData = res.data;
   if (resData.errors && resData.errors.length > 0) {
     console.error(resData.errors);
@@ -78,46 +63,7 @@ const getCommunityByName = async (name) => {
   return getCommunityByName;
 };
 
-const createPost = async (req) => {
-  let res = await axios.post(
-    config.graphql.url,
-    {
-      query: `
-      mutation {
-        createPost(input: {
-          title: "${req.title}"
-          body: "${req.body}"
-          url: "${req.url}"
-          communityName: "${req.communityName}"
-        }) {
-          id
-          title
-          url
-          createdAt
-          user {
-            username
-          }
-          voteCount
-          comments {
-            id
-          }
-        }
-      }
-    `
-    },
-    reqConfig
-  );
-  const resData = res.data;
-  if (resData.errors && resData.errors.length > 0) {
-    console.error(resData.errors);
-    return {};
-  }
-  let { createPost } = resData.data;
-  return createPost;
-};
-
 export default {
   getAllCommunities,
-  getCommunityByName,
-  createPost
+  getCommunityByName
 };

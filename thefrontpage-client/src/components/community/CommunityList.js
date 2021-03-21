@@ -1,7 +1,7 @@
 import { Link } from '@reach/router';
 import React, { useEffect, useState } from 'react';
 import { Divider, List } from 'semantic-ui-react';
-import DataManager from '../../data/DataManager';
+import { CommunityService } from '../../services/DataService';
 
 import './community.css';
 
@@ -9,7 +9,7 @@ const CommunityList = () => {
   const [communities, setCommunities] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
-      const data = await DataManager.getAllCommunities();
+      const data = await CommunityService.getAllCommunities();
       setCommunities(data);
     };
     fetchData();

@@ -1,7 +1,7 @@
 import { Link } from '@reach/router';
 import React, { useEffect, useState } from 'react';
 import { Divider, Grid, Icon, Label } from 'semantic-ui-react';
-import DataManager from '../../data/DataManager';
+import { CommunityService, PostService } from '../../services/DataService';
 import CreatePost from '../post/CreatePost';
 import PostElement from '../post/PostElement';
 
@@ -17,22 +17,27 @@ const CommunityPage = (props) => {
   const [community, setCommunity] = useState(initState);
   useEffect(() => {
     const fetchData = async () => {
-      const data = await DataManager.getCommunityByName(communityName);
+      const data = await CommunityService.getCommunityByName(communityName);
       setCommunity(data);
     };
     fetchData();
   }, [communityName]);
 
   const onCreateNewPost = async (reqData) => {
-    const res = await DataManager.createPost({
+    if (!reqData.title) {
+      return;
+    }
+    const res = await PostService.createPost({
       ...reqData,
       communityName
     });
     const { posts } = community;
-    posts.push(res);
-    setCommunity({
-      ...community
-    });
+    if (posts) {
+      posts.push(res);
+      setCommunity({
+        ...community
+      });
+    }
   };
 
   return (
