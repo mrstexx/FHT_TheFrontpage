@@ -16,17 +16,15 @@ public class PostMapper {
                 .id(post.getId())
                 .title(post.getTitle())
                 .body(post.getBody())
-                .username(post.getUser().getUsername())
                 .createdAt(post.getCreatedAt())
                 .voteCount(post.getVoteCount())
-                .commentCount(post.getComments().size())
-                .communityName(post.getCommunity().getName())
                 .url(post.getUrl())
                 .build();
     }
 
     public static Post map(PostRequest postRequest, User currentUser, Community community) {
         return Post.builder()
+                .id(postRequest.getId())
                 .title(postRequest.getTitle())
                 .body(postRequest.getBody())
                 .createdAt(LocalDateTime.now())

@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/community")
+@RequestMapping("/api/communities")
 @AllArgsConstructor
 public class CommunityResource {
 
@@ -42,6 +42,7 @@ public class CommunityResource {
         EntityModel<CommunityDto> resource = EntityModel.of(CommunityMapper.mapToDto(communityService.getCommunityByName(name)));
         resource.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(this.getClass()).getPostsByCommunityName(name)).withRel("posts"));
         resource.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(this.getClass()).getCommunityUsersByCommunityName(name)).withRel("users"));
+        resource.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(this.getClass()).getCommunityAuthorByCommunityName(name)).withRel("author"));
         return ResponseEntity.status(HttpStatus.OK).body(resource);
     }
 
@@ -57,6 +58,12 @@ public class CommunityResource {
         List<UserDto> allUsers = userService.getAllByCommunityName(name)
                 .stream().map(UserMapper::mapToDto).collect(Collectors.toList());
         return ResponseEntity.status(HttpStatus.OK).body(allUsers);
+    }
+
+    @GetMapping("/{name}/author")
+    public ResponseEntity<UserDto> getCommunityAuthorByCommunityName(@PathVariable String name) {
+        Community community = communityService.getCommunityByName(name);
+        return ResponseEntity.status(HttpStatus.OK).body(UserMapper.mapToDto(community.getCreatedBy()));
     }
 
     @PostMapping("/")

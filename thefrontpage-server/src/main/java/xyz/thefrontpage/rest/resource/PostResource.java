@@ -8,11 +8,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import xyz.thefrontpage.dto.CommentDto;
 import xyz.thefrontpage.dto.PostDto;
+import xyz.thefrontpage.dto.UserDto;
 import xyz.thefrontpage.dto.request.PostRequest;
 import xyz.thefrontpage.entity.Comment;
 import xyz.thefrontpage.entity.Post;
 import xyz.thefrontpage.mapper.CommentMapper;
 import xyz.thefrontpage.mapper.PostMapper;
+import xyz.thefrontpage.mapper.UserMapper;
 import xyz.thefrontpage.service.CommentService;
 import xyz.thefrontpage.service.PostService;
 
@@ -39,6 +41,7 @@ public class PostResource {
         Post post = postService.getPostById(id);
         EntityModel<PostDto> resource = EntityModel.of(PostMapper.mapToDto(post));
         resource.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(this.getClass()).getCommentsByPostId(id)).withRel("comments"));
+        resource.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(this.getClass()).getPostAuthorByPostId(id)).withRel("author"));
         return ResponseEntity.status(HttpStatus.OK).body(resource);
     }
 
@@ -47,6 +50,12 @@ public class PostResource {
         List<Comment> allComments = commentService.getCommentsByPostId(postId);
         List<CommentDto> commentsDto = allComments.stream().map(CommentMapper::mapToDto).collect(Collectors.toList());
         return ResponseEntity.status(HttpStatus.OK).body(commentsDto);
+    }
+
+    @GetMapping("/{postId}/author")
+    public ResponseEntity<UserDto> getPostAuthorByPostId(@PathVariable Long postId) {
+        Post post = postService.getPostById(postId);
+        return ResponseEntity.status(HttpStatus.OK).body(UserMapper.mapToDto(post.getUser()));
     }
 
     @PostMapping("/")

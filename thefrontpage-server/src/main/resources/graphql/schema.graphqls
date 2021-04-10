@@ -66,6 +66,7 @@ input LoginRequest {
 }
 
 input PostRequest {
+    id: ID
     communityName: String!
     title: String!
     url: String
@@ -73,6 +74,7 @@ input PostRequest {
 }
 
 input CommentRequest {
+    id: ID
     postId: ID!
     body: String!
 }

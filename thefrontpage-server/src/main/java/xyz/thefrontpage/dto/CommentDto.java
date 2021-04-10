@@ -13,8 +13,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class CommentDto {
     private Long id;
-    private Long postId;
     private String body;
-    private String username;
     private LocalDateTime createdAt;
 }

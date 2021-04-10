@@ -13,12 +13,9 @@ import java.time.LocalDateTime;
 @Builder
 public class PostDto {
     private Long id;
-    private String username;
-    private String communityName;
     private String title;
-    private String url;
     private String body;
+    private String url;
     private LocalDateTime createdAt;
     private Integer voteCount;
-    private Integer commentCount;
 }
