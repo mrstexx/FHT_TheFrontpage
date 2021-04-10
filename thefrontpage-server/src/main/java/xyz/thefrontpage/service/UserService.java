@@ -31,4 +31,8 @@ public class UserService {
         return userRepository.findAllByCommunities_Id(communityId);
     }
 
+    @Transactional(readOnly = true)
+    public List<User> getAllByCommunityName(String communityName) {
+        return userRepository.findAllByCommunities_Name(communityName);
+    }
 }

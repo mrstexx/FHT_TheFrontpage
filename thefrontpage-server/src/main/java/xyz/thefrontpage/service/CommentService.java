@@ -49,6 +49,12 @@ public class CommentService {
     }
 
     @Transactional(readOnly = true)
+    public Comment getCommentById(Long commentId) {
+        return commentRepository.findById(commentId)
+                .orElseThrow(() -> new IllegalStateException("No comment found with id: " + commentId));
+    }
+
+    @Transactional(readOnly = true)
     public List<Comment> getCommentsByPostId(Long postId) {
         Post post = postRepository.findById(postId).orElseThrow(
                 () -> new IllegalStateException("No post found with id: " + postId));

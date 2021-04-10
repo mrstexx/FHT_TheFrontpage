@@ -10,15 +10,18 @@ import xyz.thefrontpage.entity.Comment;
 import xyz.thefrontpage.mapper.CommentMapper;
 import xyz.thefrontpage.service.CommentService;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 @RestController
 @RequestMapping("/api/comments/")
 @AllArgsConstructor
 public class CommentResource {
 
     private final CommentService commentService;
+
+    @GetMapping("/{commentId}")
+    public ResponseEntity<CommentDto> getComment(@PathVariable Long commentId) {
+        Comment comment = commentService.getCommentById(commentId);
+        return ResponseEntity.status(HttpStatus.OK).body(CommentMapper.mapToDto(comment));
+    }
 
     @PostMapping("/")
     public ResponseEntity<CommentDto> createComment(@RequestBody CommentRequest commentRequest) {
@@ -36,12 +39,5 @@ public class CommentResource {
     public ResponseEntity<?> deleteComment(@PathVariable Long commentId) {
         commentService.deleteComment(commentId);
         return ResponseEntity.status(HttpStatus.OK).build();
-    }
-
-    @GetMapping("/{postId}")
-    public ResponseEntity<List<CommentDto>> getCommentsByPostId(@PathVariable Long postId) {
-        List<Comment> allComments = commentService.getCommentsByPostId(postId);
-        List<CommentDto> commentsDto = allComments.stream().map(CommentMapper::mapToDto).collect(Collectors.toList());
-        return ResponseEntity.status(HttpStatus.OK).body(commentsDto);
     }
 }
