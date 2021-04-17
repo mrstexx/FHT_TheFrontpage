@@ -41,9 +41,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 // public endpoints
                 .antMatchers("/api/auth/**")
                 .permitAll()
+                .antMatchers("/playground")
+                .permitAll()
+                .antMatchers("/vendor/**")
+                .permitAll()
+                .antMatchers("/playground/**")
+                .permitAll()
                 // private endpoints
-//                .anyRequest()
-//                .authenticated()
+                .anyRequest()
+                .authenticated()
                 .and().sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class);

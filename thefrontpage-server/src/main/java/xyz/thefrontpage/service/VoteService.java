@@ -12,10 +12,14 @@ import xyz.thefrontpage.repository.PostRepository;
 import xyz.thefrontpage.repository.VoteRepository;
 
 import java.util.Optional;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 @Service
 @AllArgsConstructor
 public class VoteService {
+
+    private final Lock lock = new ReentrantLock();
 
     private final PostRepository postRepository;
     private final VoteRepository voteRepository;
@@ -30,10 +34,15 @@ public class VoteService {
         if (voteByPostAndUser.isPresent() && voteByPostAndUser.get().getVoteType().equals(voteRequest.getVoteType())) {
             throw new IllegalStateException("You have already " + voteRequest.getVoteType() + "d for this post");
         }
-        if (VoteType.UP_VOTE.equals(voteRequest.getVoteType())) {
-            post.setVoteCount(post.getVoteCount() + 1);
-        } else {
-            post.setVoteCount(post.getVoteCount() - 1);
+        lock.lock();
+        try {
+            if (VoteType.UP_VOTE.equals(voteRequest.getVoteType())) {
+                post.setVoteCount(post.getVoteCount() + 1);
+            } else {
+                post.setVoteCount(post.getVoteCount() - 1);
+            }
+        } finally {
+            lock.unlock();
         }
         Vote newVote = this.mapToVote(voteRequest, currentUser, post);
         voteRepository.save(newVote);

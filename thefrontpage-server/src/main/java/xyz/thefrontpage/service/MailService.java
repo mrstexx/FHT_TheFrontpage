@@ -11,10 +11,15 @@ import org.springframework.stereotype.Service;
 import xyz.thefrontpage.dto.MailDto;
 import xyz.thefrontpage.util.MailContentBuilder;
 
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 @Service
 @AllArgsConstructor
 @Slf4j
 public class MailService {
+
+    private final Lock lock = new ReentrantLock();
 
     private final JavaMailSender mailSender;
     private final MailContentBuilder mailContentBuilder;
@@ -23,10 +28,15 @@ public class MailService {
     public void sendMail(MailDto mail) {
         MimeMessagePreparator messagePrep = mimeMessage -> {
             MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, "utf-8");
-            messageHelper.setFrom("auth@thefrontpage.xyz");
-            messageHelper.setTo(mail.getRecipient());
-            messageHelper.setSubject(mail.getSubject());
-            messageHelper.setText(mailContentBuilder.build(mail.getBody()));
+            lock.lock();
+            try {
+                messageHelper.setFrom("auth@thefrontpage.xyz");
+                messageHelper.setTo(mail.getRecipient());
+                messageHelper.setSubject(mail.getSubject());
+                messageHelper.setText(mailContentBuilder.build(mail.getBody()));
+            } finally {
+                lock.unlock();
+            }
         };
         try {
             mailSender.send(messagePrep);

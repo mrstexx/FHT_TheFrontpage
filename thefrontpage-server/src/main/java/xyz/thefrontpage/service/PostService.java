@@ -15,11 +15,15 @@ import xyz.thefrontpage.repository.PostRepository;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
 public class PostService {
+
+    private final Lock lock = new ReentrantLock();
 
     private final PostRepository postRepository;
     private final AuthService authService;
@@ -32,9 +36,8 @@ public class PostService {
 
     @Transactional(readOnly = true)
     public Post getPostById(Long id) {
-        Post post = postRepository.findById(id).orElseThrow(
+        return postRepository.findById(id).orElseThrow(
                 () -> new IllegalStateException("No post found with id - " + id));
-        return post;
     }
 
     @Transactional(readOnly = true)
@@ -66,9 +69,14 @@ public class PostService {
         if (!post.getUser().getUsername().equals(currentUser.getUsername())) {
             throw new IllegalStateException("Missing access rights to update post");
         }
-        post.setTitle(postRequest.getTitle());
-        post.setBody(postRequest.getBody());
-        post.setUrl(postRequest.getUrl());
+        lock.lock();
+        try {
+            post.setTitle(postRequest.getTitle());
+            post.setBody(postRequest.getBody());
+            post.setUrl(postRequest.getUrl());
+        } finally {
+            lock.unlock();
+        }
         postRepository.save(post);
     }
 

@@ -22,10 +22,14 @@ import xyz.thefrontpage.util.JwtUtil;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.UUID;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 @Service
 @RequiredArgsConstructor
 public class AuthService {
+
+    private final Lock lock = new ReentrantLock();
 
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
@@ -83,7 +87,12 @@ public class AuthService {
         confirmationTokenRepository.updateConfirmedAt(token, LocalDateTime.now());
         User user = userRepository.findByUsername(confirmationToken.getUser().getUsername())
                 .orElseThrow(() -> new IllegalStateException("User not found"));
-        user.setEnabled(true);
+        lock.lock();
+        try {
+            user.setEnabled(true);
+        } finally {
+            lock.unlock();
+        }
         userRepository.save(user);
     }
 

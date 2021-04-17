@@ -14,11 +14,15 @@ import xyz.thefrontpage.repository.PostRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
 public class CommentService {
+
+    private final Lock lock = new ReentrantLock();
 
     private final CommentRepository commentRepository;
     private final PostRepository postRepository;
@@ -37,7 +41,12 @@ public class CommentService {
     public void updateComment(CommentRequest commentRequest) {
         Comment comment = commentRepository.findById(commentRequest.getId())
                 .orElseThrow(() -> new IllegalStateException("No comment found with id: " + commentRequest.getId()));
-        comment.setBody(commentRequest.getBody());
+        lock.lock();
+        try {
+            comment.setBody(commentRequest.getBody());
+        } finally {
+            lock.unlock();
+        }
         commentRepository.save(comment);
     }
 

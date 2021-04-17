@@ -11,10 +11,14 @@ import xyz.thefrontpage.repository.CommunityRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 @Service
 @AllArgsConstructor
 public class CommunityService {
+
+    private final Lock lock = new ReentrantLock();
 
     private final CommunityRepository communityRepository;
     private final AuthService authService;
@@ -26,9 +30,8 @@ public class CommunityService {
 
     @Transactional(readOnly = true)
     public Community getCommunityByName(String communityName) {
-        Community community = communityRepository.findByName(communityName)
+        return communityRepository.findByName(communityName)
                 .orElseThrow(() -> new IllegalStateException("No community found with the name: " + communityName));
-        return community;
     }
 
     @Transactional(readOnly = true)
@@ -61,8 +64,13 @@ public class CommunityService {
         if (!community.getCreatedBy().getUsername().equals(currentUser.getUsername())) {
             throw new IllegalStateException("Missing access rights to update community");
         }
-        community.setDescription(communityRequest.getDescription());
-        community.setName(communityRequest.getName());
+        lock.lock();
+        try {
+            community.setDescription(communityRequest.getDescription());
+            community.setName(communityRequest.getName());
+        } finally {
+            lock.unlock();
+        }
         communityRepository.save(community);
     }
 
@@ -81,8 +89,13 @@ public class CommunityService {
     public void followCommunity(String communityName) {
         Community community = this.getCommunityByName(communityName);
         User user = authService.getCurrentUser();
-        community.getMembers().add(user);
-        user.getCommunities().add(community);
+        lock.lock();
+        try {
+            community.getMembers().add(user);
+            user.getCommunities().add(community);
+        } finally {
+            lock.unlock();
+        }
         communityRepository.save(community);
     }
 
@@ -90,8 +103,13 @@ public class CommunityService {
     public void unfollowCommunity(String communityName) {
         Community community = this.getCommunityByName(communityName);
         User user = authService.getCurrentUser();
-        community.getMembers().remove(user);
-        user.getCommunities().remove(community);
+        lock.lock();
+        try {
+            community.getMembers().remove(user);
+            user.getCommunities().remove(community);
+        } finally {
+            lock.unlock();
+        }
         communityRepository.save(community);
     }
 }
