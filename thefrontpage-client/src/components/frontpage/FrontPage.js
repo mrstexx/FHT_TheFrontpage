@@ -12,8 +12,6 @@ class FrontPage extends React.Component {
       <div>
         <h2>Latest posts</h2>
         <Grid>
-          <PostElement />
-          <PostElement />
         </Grid>
       </div>
     );

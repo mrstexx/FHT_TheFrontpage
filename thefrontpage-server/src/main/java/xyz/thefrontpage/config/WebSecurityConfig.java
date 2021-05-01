@@ -47,6 +47,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .antMatchers("/playground/**")
                 .permitAll()
+                .antMatchers("/graphql")
+                .permitAll()
                 // private endpoints
                 .anyRequest()
                 .authenticated()

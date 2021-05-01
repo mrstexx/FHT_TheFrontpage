@@ -1,7 +1,7 @@
 import { navigate } from '@reach/router';
 import { isEmpty } from 'lodash';
 import React, { useState } from 'react';
-import { Dropdown, Menu } from 'semantic-ui-react';
+import { Dropdown, Icon, Menu } from 'semantic-ui-react';
 
 import { AuthService } from '../../services/DataService';
 
@@ -10,6 +10,9 @@ const Header = () => {
   const handleItemClick = (e, { name }) => {
     setActiveItem(name);
     navigate(name.length > 0 ? `../${name}` : '../');
+  };
+  const handleProfileClick = () => {
+    navigate(`/profile`);
   };
   const onLogout = () => {
     AuthService.logout();
@@ -38,10 +41,16 @@ const Header = () => {
       />
       <Menu.Menu position="right">
         {!isEmpty(currentUsername) ? (
-          <Dropdown icon="user circle" item text="mrstexx">
+          <Dropdown icon="user circle" item text={currentUsername}>
             <Dropdown.Menu>
-              <Dropdown.Item>Profile</Dropdown.Item>
-              <Dropdown.Item onClick={onLogout}>Log Out</Dropdown.Item>
+              <Dropdown.Item onClick={handleProfileClick}>
+                <Icon name="setting" />
+                Profile
+              </Dropdown.Item>
+              <Dropdown.Item onClick={onLogout}>
+                <Icon name="log out" />
+                Log Out
+              </Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
         ) : (

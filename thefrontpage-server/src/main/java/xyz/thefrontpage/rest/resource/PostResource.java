@@ -40,8 +40,14 @@ public class PostResource {
     public ResponseEntity<?> getById(@PathVariable Long id) {
         Post post = postService.getPostById(id);
         EntityModel<PostDto> resource = EntityModel.of(PostMapper.mapToDto(post));
-        resource.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(this.getClass()).getCommentsByPostId(id)).withRel("comments"));
-        resource.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(this.getClass()).getPostAuthorByPostId(id)).withRel("author"));
+        resource.add(WebMvcLinkBuilder.linkTo(
+                WebMvcLinkBuilder.methodOn(
+                        this.getClass()).getCommentsByPostId(id)
+        ).withRel("comments"));
+        resource.add(WebMvcLinkBuilder.linkTo(
+                WebMvcLinkBuilder.methodOn(
+                        this.getClass()).getPostAuthorByPostId(id)
+        ).withRel("author"));
         return ResponseEntity.status(HttpStatus.OK).body(resource);
     }
 
