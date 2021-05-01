@@ -69,13 +69,15 @@ const CommunityPage = (props) => {
       </span>
       <Divider />
       <Grid>
-        <Grid.Row>
-          <CreatePost
-            {...{
-              onCreateNewPost: onCreateNewPost
-            }}
-          />
-        </Grid.Row>
+        {AuthService.isUserLoggedIn() === true && (
+          <Grid.Row>
+            <CreatePost
+              {...{
+                onCreateNewPost: onCreateNewPost
+              }}
+            />
+          </Grid.Row>
+        )}
         {community.posts &&
           community.posts
             .sort(

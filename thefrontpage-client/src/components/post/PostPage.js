@@ -13,11 +13,12 @@ import Comment from './Comment';
 import {
   PostService,
   CommentService,
-  AuthService
+  AuthService,
+  VoteService
 } from '../../services/DataService';
 
 import './post.css';
-import { isEmpty, isNumber } from 'lodash';
+import { isEmpty } from 'lodash';
 
 const PostPage = (props) => {
   const { postId } = props;
@@ -57,6 +58,16 @@ const PostPage = (props) => {
     }
   };
 
+  const handleVote = async (isUpVote) => {
+    const res = await VoteService.vote({ isUpVote, postId });
+    if (res) {
+      setPost({
+        ...post,
+        voteCount: isUpVote ? post.voteCount + 1 : post.voteCount - 1
+      });
+    }
+  };
+
   const username = post.user ? post.user.username : 'undefined';
   const communityName = post.community ? post.community.name : 'undefined';
   const { comments = [] } = post;
@@ -64,11 +75,23 @@ const PostPage = (props) => {
     <div className="post-page-container">
       <div className="post-grid">
         <div className="post-vote">
-          <Button basic icon>
+          <Button
+            basic
+            icon
+            onClick={() => {
+              handleVote(true);
+            }}
+          >
             <Icon name="thumbs up outline" />
           </Button>
           <span className="post-vote-count">{post.voteCount || 0}</span>
-          <Button basic icon>
+          <Button
+            basic
+            icon
+            onClick={() => {
+              handleVote(false);
+            }}
+          >
             <Icon name="thumbs down outline" />
           </Button>
         </div>
@@ -89,28 +112,30 @@ const PostPage = (props) => {
             {parse(String(post.body))}
           </div>
           <Divider horizontal>Comments</Divider>
-          <Form>
-            <Form.Group>
-              <TextArea
-                label="New comment"
-                placeholder="Add new comment..."
-                onChange={(_event, { value }) => {
-                  setCommentBody(value);
+          {AuthService.isUserLoggedIn() === true && (
+            <Form>
+              <Form.Group>
+                <TextArea
+                  label="New comment"
+                  placeholder="Add new comment..."
+                  onChange={(_event, { value }) => {
+                    setCommentBody(value);
+                  }}
+                />
+              </Form.Group>
+              <Button
+                type="submit"
+                onClick={() => {
+                  handleCreateComment({ postId, body: commentBody });
                 }}
-              />
-            </Form.Group>
-            <Button
-              type="submit"
-              onClick={() => {
-                handleCreateComment({ postId, body: commentBody });
-              }}
-              circular
-              compact
-              color="blue"
-            >
-              Comment
-            </Button>
-          </Form>
+                circular
+                compact
+                color="blue"
+              >
+                Comment
+              </Button>
+            </Form>
+          )}
           {comments.map((comment) => (
             <Comment
               key={comment.id}

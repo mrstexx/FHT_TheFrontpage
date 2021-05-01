@@ -49,16 +49,18 @@ const CommunityList = () => {
     <div>
       <h1>List of Communities</h1>
       <Divider horizontal>
-        <Button
-          ref={createRef}
-          size="small"
-          color="blue"
-          onClick={() => {
-            setShowModal(true);
-          }}
-        >
-          Create community
-        </Button>
+        {AuthService.isUserLoggedIn() === true && (
+          <Button
+            ref={createRef}
+            size="small"
+            color="blue"
+            onClick={() => {
+              setShowModal(true);
+            }}
+          >
+            Create community
+          </Button>
+        )}
       </Divider>
       <div className="community-content">
         <List>

@@ -1,7 +1,8 @@
 import { Link } from '@reach/router';
 import { isEmpty } from 'lodash';
-import React from 'react';
+import React, { useState } from 'react';
 import { Button, Grid, Icon, Image } from 'semantic-ui-react';
+import { VoteService } from '../../services/DataService';
 
 import './post.css';
 
@@ -16,6 +17,16 @@ const PostElement = (props) => {
     comments,
     communityName
   } = props;
+
+  const [vote, setVote] = useState(voteCount);
+
+  const handleVote = async (isUpVote) => {
+    const res = await VoteService.vote({ isUpVote, postId: id });
+    if (res) {
+      setVote(isUpVote ? vote + 1 : vote - 1);
+    }
+  };
+
   const usrName = user ? user.username : 'undefined';
   return (
     <Grid.Row className="post-base">
@@ -27,11 +38,23 @@ const PostElement = (props) => {
       >
         <div className="post-grid">
           <div className="post-vote">
-            <Button basic icon>
+            <Button
+              basic
+              icon
+              onClick={() => {
+                handleVote(true);
+              }}
+            >
               <Icon name="thumbs up outline" />
             </Button>
-            <span className="post-vote-count">{voteCount || 0}</span>
-            <Button basic icon>
+            <span className="post-vote-count">{vote || 0}</span>
+            <Button
+              basic
+              icon
+              onClick={() => {
+                handleVote(false);
+              }}
+            >
               <Icon name="thumbs down outline" />
             </Button>
           </div>
