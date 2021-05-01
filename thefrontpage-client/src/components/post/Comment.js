@@ -4,15 +4,16 @@ import { Icon } from 'semantic-ui-react';
 
 import './comment.css';
 
-const Comment = () => {
+const Comment = (props) => {
+  const { username, createdAt, body } = props;
   return (
     <div className="comment-container">
       <div className="comment-header">
         <Icon name="comment" />
-        <Link to="/user">admin</Link> at
-        <b>14:34</b>
+        <Link to={`/user/${username}`}>{username}</Link> at{' '}
+        <b>{new Date(createdAt).toLocaleString()}</b>
       </div>
-      <div className="comment-body">This is a comment lorem ipsum...</div>
+      <div className="comment-body">{body}</div>
     </div>
   );
 };

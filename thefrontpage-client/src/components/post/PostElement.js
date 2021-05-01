@@ -1,4 +1,5 @@
 import { Link } from '@reach/router';
+import { isEmpty } from 'lodash';
 import React from 'react';
 import { Button, Grid, Icon, Image } from 'semantic-ui-react';
 
@@ -15,6 +16,7 @@ const PostElement = (props) => {
     comments,
     communityName
   } = props;
+  const usrName = user ? user.username : 'undefined';
   return (
     <Grid.Row className="post-base">
       <div
@@ -28,7 +30,7 @@ const PostElement = (props) => {
             <Button basic icon>
               <Icon name="thumbs up outline" />
             </Button>
-            <span className="post-vote-count">{voteCount}</span>
+            <span className="post-vote-count">{voteCount || 0}</span>
             <Button basic icon>
               <Icon name="thumbs down outline" />
             </Button>
@@ -37,12 +39,12 @@ const PostElement = (props) => {
             <div className="post-body-header">
               Posted in{' '}
               <Link to={`/community/${communityName}`}>c/{communityName}</Link>{' '}
-              by <Link to="/">{user ? user.username : ''}</Link> at{' '}
+              by <Link to={`/user/${usrName}`}>{usrName}</Link> at{' '}
               <b>{new Date(createdAt).toLocaleString()}</b>
             </div>
             <div className="post-body-title">{title}</div>
             <div className="post-body-image">
-              <Image src={url} wrapped rounded />
+              {isEmpty(url) !== false && <Image src={url} wrapped rounded />}
             </div>
             <div className="post-body-footer">
               <Link to={`/post/${id}`}>

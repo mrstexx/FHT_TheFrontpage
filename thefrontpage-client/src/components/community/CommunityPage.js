@@ -29,11 +29,11 @@ const CommunityPage = (props) => {
 
   const onCreateNewPost = async (reqData) => {
     if (!reqData.title) {
-      alert('Field "title" is required to create a new field');
+      alert('Field "title" is required to create a new community');
       return;
     }
     if (!AuthService.isUserLoggedIn()) {
-      alert('You must be logged in to create a post');
+      alert('You must be logged in to create a community');
       return;
     }
     const res = await PostService.createPost({
@@ -61,8 +61,11 @@ const CommunityPage = (props) => {
             {community.members.length}
           </Label>
         )}
-        - created by <Link to="/">{community.createdBy.username}</Link> at{' '}
-        {new Date(community.createdAt).toLocaleString()}
+        - created by{' '}
+        <Link to={`/user/${community.createdBy.username}`}>
+          {community.createdBy.username}
+        </Link>{' '}
+        at {new Date(community.createdAt).toLocaleString()}
       </span>
       <Divider />
       <Grid>

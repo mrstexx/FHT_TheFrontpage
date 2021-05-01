@@ -32,7 +32,7 @@ function App() {
         <Router>
           <FrontPage path="/" />
           <FrontPage path="/feed" />
-          <PostPage path="/post" />
+          <PostPage path="/post/:postId" />
           <CommunityList path="/community" />
           <CommunityPage path="/community/:communityName" />
           <Login path="/login" />

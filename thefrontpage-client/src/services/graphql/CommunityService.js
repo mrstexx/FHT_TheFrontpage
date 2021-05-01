@@ -46,17 +46,17 @@ const getCommunityByName = async (name) => {
             username
           }
           posts {
+            id
+            title
+            url
+            createdAt
+            user {
+              username
+            }
+            voteCount
+            comments {
               id
-              title
-              url
-              createdAt
-              user {
-                username
-              }
-              voteCount
-              comments {
-                id
-              }
+            }
           }
         }
       }
@@ -78,12 +78,12 @@ const createCommunity = async ({ name, description }) => {
       query: `
     mutation {
       createCommunity(input: {
-          name: "${name}",
-          description: "${description}",
+        name: "${name}",
+        description: "${description}",
       }) {
-          id,
-          name,
-          description
+        id,
+        name,
+        description
       }
     }
     `
