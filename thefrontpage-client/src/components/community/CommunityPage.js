@@ -1,6 +1,6 @@
 import { Link } from '@reach/router';
 import React, { useEffect, useState } from 'react';
-import { Divider, Grid, Icon, Label } from 'semantic-ui-react';
+import { Button, Divider, Grid, Icon, Label } from 'semantic-ui-react';
 import {
   CommunityService,
   PostService,
@@ -10,6 +10,19 @@ import CreatePost from '../post/CreatePost';
 import PostElement from '../post/PostElement';
 
 import './community.css';
+
+const isCurrentUserMember = (members) => {
+  if (!members) {
+    return false;
+  }
+  const user = members.find(
+    (member) => AuthService.getCurrentUsername() === member.username
+  );
+  if (user) {
+    return true;
+  }
+  return false;
+};
 
 const initState = {
   createdBy: {},
@@ -49,6 +62,36 @@ const CommunityPage = (props) => {
     }
   };
 
+  const handleFollow = async (isFollow) => {
+    if (!AuthService.isUserLoggedIn()) {
+      alert('You must be logged in to create a community');
+      return;
+    }
+    const currentUsername = AuthService.getCurrentUsername();
+    if (isFollow) {
+      let res = await CommunityService.follow(community.name);
+      if (res) {
+        setCommunity({
+          ...community,
+          members: [...community.members, { username: currentUsername }]
+        });
+      }
+    } else {
+      let res = await CommunityService.unfollow(community.name);
+      if (res) {
+        const { members } = community;
+        const newMembers = members.filter(
+          (member) => member.username !== currentUsername
+        );
+        setCommunity({
+          ...community,
+          members: newMembers
+        });
+      }
+    }
+  };
+
+  const isMember = isCurrentUserMember(community.members);
   return (
     <div>
       <h2>@{community.name}</h2>
@@ -61,6 +104,17 @@ const CommunityPage = (props) => {
             {community.members.length}
           </Label>
         )}
+        <Button
+          icon
+          size="mini"
+          color={isMember ? 'grey' : 'green'}
+          onClick={() => {
+            handleFollow(!isMember);
+          }}
+        >
+          <Icon name={isMember ? 'remove' : 'add'} />{' '}
+          {isMember ? 'Leave' : 'Join'}
+        </Button>
         - created by{' '}
         <Link to={`/user/${community.createdBy.username}`}>
           {community.createdBy.username}

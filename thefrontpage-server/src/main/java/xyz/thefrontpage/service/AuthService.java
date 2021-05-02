@@ -21,6 +21,8 @@ import xyz.thefrontpage.util.JwtUtil;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.UUID;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -69,7 +71,7 @@ public class AuthService {
         return Auth.builder()
                 .authToken(token)
                 .username(loginRequest.getUsername())
-                .expiresAt(Instant.now().plusMillis(jwtUtil.getJwtExpirationInMillis()))
+                .expiresAt(Instant.now().plusMillis(jwtUtil.getJwtExpirationInMillis()).atZone(ZoneId.systemDefault()).toLocalDateTime())
                 .build();
     }
 

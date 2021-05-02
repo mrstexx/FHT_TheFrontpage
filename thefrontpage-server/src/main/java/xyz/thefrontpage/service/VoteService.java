@@ -34,6 +34,11 @@ public class VoteService {
         if (voteByPostAndUser.isPresent() && voteByPostAndUser.get().getVoteType().equals(voteRequest.getVoteType())) {
             throw new IllegalStateException("You have already " + voteRequest.getVoteType() + "d for this post");
         }
+        boolean shouldSaveVote = true;
+        if (voteByPostAndUser.isPresent() && !voteByPostAndUser.get().getVoteType().equals(voteRequest.getVoteType())) {
+            voteByPostAndUser.ifPresent(voteRepository::delete);
+            shouldSaveVote = false;
+        }
         lock.lock();
         try {
             if (VoteType.UP_VOTE.equals(voteRequest.getVoteType())) {
@@ -45,7 +50,9 @@ public class VoteService {
             lock.unlock();
         }
         Vote newVote = this.mapToVote(voteRequest, currentUser, post);
-        voteRepository.save(newVote);
+        if (shouldSaveVote) {
+            voteRepository.save(newVote);
+        }
         postRepository.save(post);
     }
 

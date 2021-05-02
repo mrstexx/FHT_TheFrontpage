@@ -99,8 +99,52 @@ const createCommunity = async ({ name, description }) => {
   return createCommunity;
 };
 
+const follow = async (communityName) => {
+  let res = await axios.post(
+    config.graphql.url,
+    {
+      query: `
+    mutation {
+      followCommunity(name: "${communityName}")
+    }
+    `
+    },
+    reqConfig
+  );
+  const resData = res.data;
+  if (resData.errors && resData.errors.length > 0) {
+    console.error(resData.errors);
+    return null;
+  }
+  let { followCommunity } = resData.data;
+  return followCommunity;
+};
+
+const unfollow = async (communityName) => {
+  let res = await axios.post(
+    config.graphql.url,
+    {
+      query: `
+    mutation {
+      unfollowCommunity(name: "${communityName}")
+    }
+    `
+    },
+    reqConfig
+  );
+  const resData = res.data;
+  if (resData.errors && resData.errors.length > 0) {
+    console.error(resData.errors);
+    return null;
+  }
+  let { unfollowCommunity } = resData.data;
+  return unfollowCommunity;
+};
+
 export default {
   getAllCommunities,
   getCommunityByName,
-  createCommunity
+  createCommunity,
+  follow,
+  unfollow
 };

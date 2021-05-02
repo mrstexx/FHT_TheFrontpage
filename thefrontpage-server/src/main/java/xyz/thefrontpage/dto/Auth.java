@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -14,5 +14,5 @@ import java.time.Instant;
 public class Auth {
     private String authToken;
     private String username;
-    private Instant expiresAt;
+    private LocalDateTime expiresAt;
 }
