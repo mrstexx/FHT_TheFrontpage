@@ -1,6 +1,7 @@
 ## FHT_TheFrontpage - Server-Side Implementation
 Server-side implementation is done using Spring Boot library for REST API and GraphQL services.
-The application configuration is in `application.yml` file.
+The application configuration is in `application.yml` file. To start the appliaction in a web server, mailserver(i.e. https://github.com/maildev/maildev) and database server (supported database is H2 -> https://www.h2database.com/html/main.html) must run first.
+
 #### GraphQL Schema
 Path to file `./src/main/resources/graphql/schema.graphqls`
 
